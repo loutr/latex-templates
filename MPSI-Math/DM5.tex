@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{tikz,tkz-tab}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+
+
+\title{\textbf{DM \No 5~: Intégrales de Wallis}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+  \hrulefill
+
+  \vspace*{2cm}
+  \hrulefill
+
+  \section{Étude préliminaire}
+  On désigne par intégrale de Wallis les intégrales suivantes~:
+  \begin{displaymath}
+    \forall n\in\mathbb{N},\ I_n=\int_0^{\pi/2}\cos^n(x)\,\mathrm dx \quad\text{et}\quad J_n=\int_0^{\pi/2} \sin^n(x)\, \mathrm dx
+  \end{displaymath}
+
+  On considère la fonction $\varphi\colon x\mapsto\frac{\pi}{2}-x,\ [0;\pi/2]\to[0;\pi/2]$, $\varphi$ de classe $C^1$ sur son intervalle de définition. On pose $x=\varphi(u)$, on remarque que $\varphi$ est bijective et que $\varphi^{-1}=\varphi$. On a~:
+  \begin{displaymath}
+    I_n=\int_0^{\pi/2}\cos^n(x)\,\mathrm dx=
+    \int_{\varphi(0)}^{\varphi(\pi/2)}\cos^n(\varphi(u))\varphi'(u)\,\mathrm du = \int_{\pi/2}^0 \cos^n\left(\frac{\pi}{2}-u\right)(-1)\, \mathrm du = -\int_0^{\pi/2} -\sin^n(u)\,\mathrm du = J_n
+  \end{displaymath}
+
+  Calculons maintenant $I_0$ et $I_1$~:
+  \begin{displaymath}
+    I_0 = \int_0^{\pi/2}\cos^0(x)\,\mathrm dx = \int_0^{\pi/2}\mathrm dx = \frac{\pi}{2} \quad;\quad I_1 = \int_0^{\pi/2}\cos(x)\,\mathrm dx = [\sin x]_0^{\pi/2} = 1
+  \end{displaymath}
+
+  \subsection{Calculs supplémentaires}
+  Linéarisons l'expression de $\cos^2x$ et $\cos^3x$ à l'aide des nombres complexes, afin de déterminer les valeurs de $I_2$ et $I_3$. On écrit, en utilisant ensuite l'unicité de l'écriture algébrique d'un nombre complexe~:
+  \begin{align*}
+    \cos(2x)+i\sin(2x)=e^{2ix}=\left(e^{ix}\right)^2 = (\cos x + i\sin x)^2 = \cos^2x + 2i\cos(x)\sin(x) - \sin^2x \\
+    \therefore \cos 2x = \cos^2x - \sin^2x = 2\cos^2x - 1 \Rightarrow \cos^2x = \frac{1}{2}(\cos 2x + 1)
+  \end{align*}
+  \begin{align*}
+    \cos(3x)+i\sin(3x)=(\cos x + i\sin x)^3= \cos^3x + 3i\cos^2(x)\sin(x) - 3\cos(x)\sin^2(x) - i\sin^3x \\
+    \therefore \cos 3x = \cos^3x - 3\cos(x)(1-\cos^2x) = 4\cos^3 -3\cos x \Rightarrow \cos^3x=\frac{1}{4}(\cos 3x + 3\cos x)
+  \end{align*}
+  On peut maintenant calculer~:
+  \begin{align*}
+    &I_2=\int_0^{\pi/2}\cos^2(x)\,\mathrm dx =\frac{1}{2}\int_0^{\pi/2}(\cos 2x + 1)\,\mathrm dx = \frac{1}{2}\left[\frac{1}{2}\sin 2x + x\right]_0^{\pi/2} = \frac{1}{2}\left(\sin\pi + \frac{\pi}{2}\right)= \frac{\pi}{4} \\
+    &I_3=\int_0^{\pi/2}\cos^3(x)\,\mathrm dx = \frac{1}{4}\int_0^{\pi/2}(\cos 3x + 3\cos x)\,\mathrm dx = \frac{1}{4}\left[\frac{1}{3}\sin 3x + 3\sin x\right]_0^{\pi/2}= \frac{1}{12}\sin\frac{3\pi}{2}+\frac{3}{4}\sin\frac{\pi}{2}=\frac{-1}{12}+\frac{3}{4} = \frac{2}{3}
+  \end{align*}
+
+  \section{Recherche d'une expression générale}
+  Dans cette partie, $n$ désigne un entier naturel supérieur à 1. On réécrit $J_n$ pour faire apparaître une relation de récurrence~:
+  \begin{align*}
+    J_n &=\int_0^{\pi/2} \sin^n(x)\, \mathrm dx = J_n=\int_0^{\pi/2} \sin^{n-2}(x)\sin^2(x)\, \mathrm dx =\int_0^{\pi/2} \sin^{n-2}(x)(1-\cos^2 x)\, \mathrm dx \\
+    J_n &= \int_0^{\pi/2} \sin^{n-2}(x)\, \mathrm dx - \int_0^{\pi/2} \sin^{n-2}(x)\cos^2(x)\, \mathrm dx
+  \end{align*}
+  Étudions cette dernière intégrale. On pose $\forall x\in[0;\pi/2],\ u(x)=\sin^{n-1}x$ et $v(x)=\cos x$. Ces fonctions sont dérivables sur leur intervalle de définition et $u'(x)=(n-1)\cos(x)\sin^{n-2}x$, $v'(x)=-\sin x$. $u$ et $v$ sont donc de classe $C^1$ sur $[0;\pi/2]$. Calculons maintenant par intégration par partie~:
+  \begin{align*}
+    \int_0^{\pi/2} \sin^{n-2}(x)\cos^2(x)\, \mathrm dx &= \int_0^{\pi/2}\frac{n-1}{n-1}\cos(x)\sin^{n-2}(x)\cos(x)\,\mathrm dx = \frac{1}{n-1}\int_0^{\pi/2}\left(\sin^{n-1}x\right)'\cos(x)\,\mathrm dx \\
+    &= \frac{1}{n-1}\left[\sin^{n-1}(x)\cos(x)\right]_0^{\pi/2}-\frac{1}{n-1}\int_0^{\pi/2} \sin^{n-1}(x)(-\sin x)\, \mathrm dx \\
+    &= \frac{1}{n-1}\sin^{n-1}(\pi/2)\cos(\pi/2)-\sin^{n-1}(0)\cos(0) - \frac{1}{n-1}\int_0^{\pi/2}-\sin^n(x)\,\mathrm dx \\
+    &= \frac{1}{n-1}\int_0^{\pi/2}\sin^n(x)\,\mathrm dx = \frac{1}{n-1}J_n
+  \end{align*}
+  On peut désormais injecter le résultar dans l'expression obtenue précédemment de $J_n$~:
+  \begin{equation} \label{EQ1}
+    J_n = \int_0^{\pi/2} \sin^{n-2}(x)\, \mathrm dx - \frac{1}{n-1}J_n = J_{n-2}-\frac{1}{n-1}J_n \Longrightarrow J_n + \frac{1}{n-1}J_n = J_{n-2} \Longrightarrow J_n = \frac{n-1}{n}J_{n-2}
+  \end{equation}
+
+  On pose maintenant~:
+  \begin{displaymath}
+    \forall n>0,\ a_n = \frac{1\cdot3\cdot5\cdots(2n-1)}{2\cdot4\cdot6\cdots(2n)}=\frac{\prod_{k=1}^n (2k-1)}{\prod_{k=1}^n(2k)} \quad\text{et}\quad b_n = \frac{2\cdot4\cdot6\cdots(2n)}{1\cdot3\cdot5\cdots(2n+1)}= \frac{\prod_{k=1}^n(2k)}{\prod_{k=1}^n (2k+1)}
+  \end{displaymath}
+  On étudie la propriété $(H_p): J_{2p} = a_pJ_0\;;\; J_{2p+1} = b_pJ_1$. Démontrons-la par récurrence. À $n=1$, \\ $a_1J_0 = \frac{1}{2}\times\frac{\pi}{2}=\frac{\pi}{4}=J_2$ et $b_1J_1=\frac{2}{3}\times 1 = \frac{2}{3}=I_3$.
+  Supposons maintenant qu'il existe $p\in\mathbb{N}^*$ tel que $(H_p)$ soit vraie. Montrons qu'alors $(H_{p+1})$ l'est aussi.
+  \begin{align*}
+    J_{2p} = a_p J_0 \Longrightarrow J_{2p}\frac{2p+2-1}{2p+2}= a_p \frac{2(p+1)-1}{2(p+1)}J_0 \Longrightarrow J_{2p+2} = a_{p+1}J_0 \Longrightarrow J_{2(p+1)}=a_{p+1}J_0 \\
+    J_{2p+1}=b_pJ_1 \Longrightarrow J_{2p+1}\frac{(2p+1)+2-1}{(2p+1)+2} =b_p\frac{2(p+1)}{2(p+1)+1}J_1 \Longrightarrow J_{2p+3}=b_{p+1}J_1 \Longrightarrow J_{2(p+1)+1}=b_{p+1}J_1
+  \end{align*}
+  On en conclut que $(H_n)\Rightarrow(H_{n+1})$ et d'après le principe de raisonnement par récurrence, on en conclut~:
+  \begin{displaymath}
+    \forall n\in\mathbb{N}^*,\ J_{2p}=a_pJ_0,\ J_{2p+1}=b_pJ_1
+  \end{displaymath}
+  On tente donc finalement d'exprimer $a_p$ et $b_p$ avec des factorielles. On a~:
+  \begin{align*}
+    a_p = \frac{1\cdot3\cdot5\cdots(2p-1)}{2\cdot4\cdot6\cdots(2p)}= \frac{1\cdot3\cdot5\cdots(2p-1)\cdot2\cdot4\cdots(2p)}{2\cdot4\cdot6\cdots(2p)\cdot2\cdot4\cdots(2p)}= \frac{1\cdot2\cdot3\cdots(2p)}{(2\cdot4\cdot6\cdots(2p))^2}=\frac{(2p)!}{\left(2^p(p!)\right)^2} \\
+    b_p = \frac{2\cdot4\cdot6\cdots(2p)}{1\cdot3\cdot5\cdots(2p+1)}= \frac{2\cdot4\cdot6\cdots(2p)\cdot2\cdot4\cdot6\cdots(2p)}{1\cdot3\cdot5\cdots(2p+1)\cdot2\cdot4\cdot6\cdots(2p)} = \frac{(2\cdot4\cdot6\cdots(2p))^2}{1\cdot2\cdot3\cdots(2p+1)}= \frac{\left(2^p(p!)\right)^2}{(2p+1)!}
+  \end{align*}
+  On en conlut~:
+  \begin{displaymath}
+    \forall n\in\mathbb{N}^*,\ J_{2p}=\frac{(2p)!}{\left(2^pp!\right)^2}\cdot\frac{\pi}{2}\;;\; J_{2p+1} = \frac{\left(2^pp!\right)^2}{(2p+1)!} \cdot \frac{2}{3}
+  \end{displaymath}
+\end{document}

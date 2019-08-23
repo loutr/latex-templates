@@ -1,0 +1,292 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{tikz,tkz-tab}
+
+\title{\textbf{DM \No 1~: Équation différentielle et limites}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+  \hrulefill
+
+  \vspace{2cm}
+
+  \hrulefill
+
+  \section{Suites, racines et limites}
+  On pose les suites $S_n$ et $u_n$ telles que~:
+  \begin{displaymath}
+    \forall n\in\mathbb{N}^*,\ S_n = \sum_{k=1}^n \frac{1}{\sqrt{k}}\text{ et } u_n =  \frac{S_n}{\sqrt{n}}
+  \end{displaymath}
+  On se propose de rechercher les limites éventuelles de ces suites. Considérons les propriétés suivantes~:
+  \begin{enumerate}
+    \item $(H_n): S_n\leqslant\sqrt{n-1}+\sqrt{n}$~;
+    \item $(L_n): S_n\geqslant 2\sqrt{n+1}-2$.
+  \end{enumerate}
+  \subsection{Démonstration de $(H_n)$}
+
+  Démontrons-les succesivement par récurrence. Étudions d'abord la somme suivante définie sur $\mathbb{N}^*$~:
+  \begin{align*}
+    \sqrt{n-1}+\frac{1}{\sqrt{n+1}}-\sqrt{n+1}=\frac{1}{\sqrt{n+1}}\left[\sqrt{(n-1)(n+1)}+1-\left(\sqrt{n+1}\right)^2\right]
+    \\=\frac{1}{\sqrt{n+1}}\left[\sqrt{n^2-1}-n\right]\leqslant0\because (n^2-1<n^2)\Rightarrow(\sqrt{n^2-1}<n)\text{ par croissance de la fonction racine carré sur }\mathbb{R}_+
+  \end{align*}
+  \begin{equation}\label{EQ1}
+    \therefore\forall n\in\mathbb{N}^*,\ \sqrt{n-1}+\frac{1}{\sqrt{n+1}}-\sqrt{n+1}\leqslant0\iff\sqrt{n-1}+\frac{1}{\sqrt{n+1}}\leqslant\sqrt{n+1}
+  \end{equation}
+  Au rang $n=1$, on a~: $S_1 = \frac{1}{\sqrt{1}} = 1\ ;\ \sqrt{1-1}+\sqrt{1} = 1 \geqslant S_1$~; donc $(H_1)$ est vraie. Supposons maintenant que $(H_n)$ est vraie pour un certain rang $n$, montrons que $(H_{n+1})$ l'est aussi~:
+  \begin{align*}
+    S_n\leqslant\sqrt{n-1}+\sqrt{n}&\iff\sum_{k=1}^n\frac{1}{\sqrt{k}}+\frac{1}{\sqrt{n+1}}\leqslant\sqrt{n-1}+\sqrt{n}+\frac{1}{\sqrt{n+1}}
+    \\&\iff S_{n+1}=\sum_{k=1}^{n+1}\frac{1}{\sqrt{k}}\leqslant\sqrt{n+1}+\sqrt{n}\text{ d'après (\ref{EQ1})}
+  \end{align*}
+  On a donc~: $(H_n)\Rightarrow(H_{n+1})$. D'après le principe de raisonnement par récurrence, on en conlut~:
+  \begin{displaymath}
+    \forall n\in\mathbb{N}^*,\ S_n\leqslant\sqrt{n-1}+\sqrt{n}
+  \end{displaymath}
+  \subsection{Démonstration de $(L_n)$}
+  On détermine préalablement le signe de la somme suivante~:
+  \begin{align*}
+    2\sqrt{n+1}+\frac{1}{\sqrt{n+1}}\geqslant2\sqrt{n+2}\iff2\sqrt{n+1}\sqrt{n+1}+1\geqslant 2\sqrt{n+2}\sqrt{n+1}\iff 2n+3\geqslant2\sqrt{n^2+3n+2} \\
+    \iff (2n+3)^2\geqslant 4(n^2+3n+2)\text{ et } \left(2n+3 >0\text{ et }(n+1)(n+2)>0 \Leftrightarrow n > -\frac{2}{3}\text{ et }n\not\in[-2;-1]\right) \\
+    \iff 4n^2+12n+9\geqslant 4n^2+12n +8, \text{ toujours vraie}
+  \end{align*}
+  \begin{equation}\label{EQ2}
+    \therefore\forall n\in\mathbb{N}^*,\ 2\sqrt{n+1}+\frac{1}{\sqrt{n+1}}\geqslant2\sqrt{n+2}
+  \end{equation}
+
+  On détermine la valeur de $(L_1)$. On a~: $S_1 = 1$ et $2\sqrt{1+1}-2\approx 0.83\leqslant 1$. $(L_1)$ est donc vraie. On considère maintenant un entier $n$ tel que $(L_n)$ est vraie. Montrons alors que $(L_{n+1})$ l'est aussi~:
+  \begin{align*}
+    S_n\geqslant2\sqrt{n+1}-2&\iff\sum_{k=1}^n\frac{1}{\sqrt{k}}+\frac{1}{\sqrt{n+1}}\geqslant2\sqrt{n+1}-2+\frac{1}{\sqrt{n+1}}
+    \\&\iff S_{n+1}=\sum_{k=1}^{n+1}\frac{1}{\sqrt{k}}\geqslant2\sqrt{n+2}-2\text{ d'après (\ref{EQ2})}
+  \end{align*}
+  \subsection{Conclusion}
+  On sait d'après la démonstration relative à $(L_n)$, que $S_n$ est minorée par $2\sqrt{n+1}-2$ pour tout entir $n$ non nul. Cependant on a~:
+  \begin{displaymath}
+    \lim_{n\to\infty} 2\sqrt{n+1}-2 =+\infty\text{, par limite de somme et de fonction composée.}
+  \end{displaymath}
+  D'après le théorème de minoration, on en conclut que $S_n$ diverge vers $+\infty$. Au contraire, on a~:
+  \begin{align*}
+    \forall n\in\mathbb{N}^*,\ 2\sqrt{n+1}-2\leqslant S_n\leqslant\sqrt{n-1}+\sqrt{n} &\iff 2\sqrt\frac{n+1}{n} - \frac{2}{\sqrt{n}}\leqslant \frac{S_n}{\sqrt{n}} \leqslant \sqrt\frac{n-1}{n} + 1 \\
+    &\iff 2\sqrt{1+\frac{1}{n}} - \frac{2}{\sqrt{n}}\leqslant u_n \leqslant \sqrt{1-\frac{1}{n}}+1
+  \end{align*}
+  Cependant~: $\lim_{n\to\infty}2\sqrt{1+\frac{1}{n}}-\frac{2}{\sqrt{n}}=2\sqrt{1}=2$, et $\lim_{n\to\infty}\sqrt{1-\frac{1}{n}}+1=\sqrt{1}+1=2$. D'après le théorème des gendarmes on déduit d'après l'inégalité précédente que~: $\lim_{n\to\infty}u_n=2$.
+
+  \section{Problème}
+  Dans tout l'exercice $n$ désigne un entier, avec $n\geqslant 2$
+  \subsection{Résolution de l'équation différentielle}
+  On considère l'équation différentielle d'ordre 1 suivante $(E)$ et son ESSMA $(H)$~:
+  \begin{displaymath}
+    (E): y'-\frac{1}{n}y=-\frac{x+1}{n(n+1)}\text{ et } (H):y'-\frac{1}{n}y=0
+  \end{displaymath}
+
+  Les solutions de $(H)$, notées $f_H$ sont d'après le cours de la forme $f_H:x\mapsto\lambda e^{\frac{x}{n}},\ \lambda\in\mathbb{R}$. On remarque que le second membre de $(E)$ est un polynôme de degré 1, on recherche donc une solution particulière de $(E)$ notée $f_p$ de la forme $f_p:x\mapsto ax+b,\ a,b\in\mathbb{R}$, $f_p$ est donc dérivable sur $\mathbb{R}$ et $f_p':x\mapsto a$. $f_p$ est donc solution de $(E)$ si, et seulement si~:
+  \begin{align*}
+    f_p'(x)-\frac{1}{n}f_p(x)=-\frac{x+1}{n(n+1)}&\iff a-\frac{1}{n}(ax+b)=-\frac{x}{n(n+1)}-\frac{1}{n(n+1)}\iff -\frac{a}{n}x+\left(a-\frac{b}{n}\right)=-\frac{x}{n(n+1)}-\frac{1}{n(n+1)} \\
+    &\iff\left\{
+      \begin{array}{rl}
+        -\frac{a}{n}  &=-\frac{1}{n(n+1)} \\
+        a-\frac{b}{n} &=-\frac{1}{n(n+1)}
+      \end{array}
+    \right.
+    \iff\left\{
+      \begin{array}{rl}
+        a&=\frac{1}{n+1}\\
+        b&=\frac{1}{n+1}+an = \frac{1+n}{n+1}=1
+      \end{array}
+    \right.
+  \end{align*}
+
+  On en déduit qu'une solution particulière de $(E)$ $f_p$ est $f_p:x\mapsto\frac{x}{n+1}+1$. Or la solution  générale de $(E)$ correspond à la somme d'une de ses solutions particulières avec la solution générale de $(H)$. Finalement on a donc~:
+  \begin{displaymath}
+    S=\left\{
+      \begin{array}{rl}
+        \mathbb{R}\!&\mapsto\mathbb{R} \\
+        x\!&\mapsto\frac{x}{n+1}+1+\lambda e^\frac{x}{n}
+      \end{array}
+      ,\ \lambda\in\mathbb{R}
+      \right\}
+  \end{displaymath}
+
+  On cherche maintenant une fonction $f$ telle que $f\in S$ et $f(0)=0$. On a~: $f(0)=\frac{0}{n+1}+1+\lambda e^\frac{0}{n}=0\iff\lambda=-1$. On en déduit $f:x\mapsto \frac{x}{n+1}+1-e^\frac{x}{n}$.
+
+  \subsection{Étude de la fonction}
+  On considère la fonction suivante définie sur $\mathbb{R}$, $f_n:x\mapsto \frac{x}{n+1}+1-e^\frac{x}{n}$. On se propose d'étudier cette fonction pour déterminer la position de ses racines éventuelles. Étudions donc ses variations. $f_n$ est dérivable sur $\mathbb{R}$ par somme, et on a~: $f_n'(x)=\frac{1}{n+1}-\frac{1}{n}e^\frac{x}{n}$. On résout maintenant l'inégalité suivante afin de construire un tableau de variations (voir figure \ref{varfn})~:
+  \begin{displaymath}
+    f_n'(x)=\frac{1}{n+1}-\frac{1}{n}e^\frac{x}{n}>0\iff e^\frac{x}{n}<\frac{n}{n+1}\iff\frac{x}{n}<\ln\left(\frac{n}{n+1}\right)\iff x<n\ln\left(\frac{n}{n+1}\right)=\alpha_n
+  \end{displaymath}
+
+  Déterminons maintenant les limites de $f_n$ en $\pm\infty$~:
+  \begin{displaymath}
+    \lim_{x\to +\infty}f_n(x)=\lim_{x\to +\infty}\frac{x}{n+1}+1-e^\frac{x}{n}=\lim_{x\to +\infty}x\left(\frac{1}{n+1}+\frac{1}{x}-\frac{e^\frac{x}{n}}{x}\right)=-\infty\ \because\lim_{x\to +\infty}\frac{e^\frac{x}{n}}{x}=\lim_{\chi\to +\infty}\frac{ne^\chi}{\chi}=+\infty
+  \end{displaymath}
+  \begin{displaymath}
+    \lim_{x\to -\infty}f_n(x)=\lim_{x\to -\infty}\frac{x}{n+1}+1-e^\frac{x}{n}=\lim_{x\to -\infty}\frac{x}{n+1}=-\infty\ \because\forall n> 0,\lim_{x\to -\infty}e^\frac{x}{n}=0
+  \end{displaymath}
+  Par limite de somme, de produit et de fonction composée. De plus $f_n(0)=\frac{0}{n+1}+1-e^\frac{0}{n}=1-1=0$.
+
+  \begin{figure}[h]
+   \begin{center}
+    \begin{tikzpicture}
+     \tkzTabInit{$x$ / 1, $f_n'$ / 1, $f_n$ / 1.5}{$-\infty$, $\alpha_n$, $+\infty$}
+     \tkzTabLine{,+, 0, -,}
+     \tkzTabVar{-/ $-\infty$, +/ $f_n(\alpha_n)$, -/ $-\infty$}
+     \tkzTabVal[draw]{2}{3}{0.4}{0}{0}
+    \end{tikzpicture}
+   \end{center}
+   \caption{Tableau de variations de $f_n$.}
+   \label{varfn}
+  \end{figure}
+
+  D'après le tableau de variations, on sait que $f_n$ est décroissante sur $[\alpha_n, 0]$, on a donc~: $\alpha_n<0\iff f_n(\alpha_n)>0$. Calculons sa valeur~:
+  \begin{displaymath}
+    f_n(\alpha_n)=\frac{n\ln\left(\frac{n}{n+1}\right)}{n+1}+1-e^{\ln\left(\frac{n}{n+1}\right)}=\frac{\alpha_n}{n+1}+\frac{n+1}{n+1}-\frac{n}{n+1}=\frac{\alpha_n+1}{n+1}
+  \end{displaymath}
+
+  On considère maintenant un repère orthonormé direct $(O,\vec\imath,\vec\jmath)$ de $\mathbb{R}^2$, la fonction $g_n:x\mapsto\frac{x}{n+1}+1$, de droite associée $\Delta_n$ dans le plan, ainsi que $\mathscr{C}_n$ la courbe associée à $f_n$. Or on a~: $\lim_{x\to -\infty}(f_n-g_n)(x)=\lim_{x\to -\infty}-e^\frac{x}{n}=0$. On en conclut que $\Delta_n$ est une asymptote oblique à $\mathscr{C}_n$ en $-\infty$. On représente lesdites courbes à la figure \ref{C2D2}.
+  \begin{figure}[ht]
+    \begin{center}
+      \begin{tikzpicture}[scale=0.8]
+        \draw [thin, color=gray!25] (-6,-4) grid (4,3);
+        \draw (-6,0) -- (4,0);
+        \draw (0,-4) -- (0,3);
+        \draw [domain=-6:3.657,samples=200] plot (\x,{\x/3 +1-e^(\x/2)}) node [right] {$\mathscr{C}_2$};
+        \draw [domain=-6:4,samples=5] plot (\x,{\x/3 +1}) node [left, above] {$\Delta_2$};
+        \draw[->, >=stealth, thick] (0,0)--(1,0) node[above]{$\vec\imath$};
+        \draw[->, >=stealth, thick] (0,0)--(0,1) node[below left]{$\vec\jmath$};
+        \node[below left] at (0,0){O};
+      \end{tikzpicture}
+    \end{center}
+    \caption{Représentation de $\mathscr{C}_2$ et $\Delta_2$}
+    \label{C2D2}
+  \end{figure}
+
+  D'après le tableau de variations, on décompose la fonction sur des intervalles sur lesquels elle est monotone, on remarque que~: $0\in f_n(]-\infty, \alpha_n])=]-\infty,f_n(\alpha_n)]$. Cependant $f_n$ est continue sur $\mathbb{R}$ (par somme) et strictement croissante sur $]-\infty, \alpha_n]$. On en conclut d'après le corollaire du TVI~: $\exists! x_n\in]-\infty, \alpha_n],\ f_n(x_n)=0$. De même, $0\not\in f_n([\alpha_n, 0[)$, l'équation $f_n(x)=0$ n'a donc pas de solution sur $[\alpha_n, 0[$. D'où~:
+  \begin{displaymath}
+    \exists! x_n\in]-\infty, 0[,\ f_n(x_n)=0
+  \end{displaymath}
+
+  \subsection{Limite de la suite $(x_n)_{n\geqslant 2}$}
+  \subsubsection{Minoration de $(x_n)_{n\geqslant 2}$}
+
+  Soit la fonction $\varphi:x\mapsto \frac{2}{x}+\ln \frac{x-1}{x+1}$ définie sur $]1,+\infty[$. Étudions-en les variations puis le signe. $\varphi$ est dérivable si, et seulement si~: $\frac{x-1}{x+1}>0 \iff x-1>0\ \because x>-1\iff x>1$. $\varphi$ est donc dérivable sur son ensemble de définition, et~:
+  \begin{displaymath}
+    \varphi'(x)=-\frac{2}{x^2}+\frac{1}{x-1}-\frac{1}{x+1}=\frac{-2(x+1)(x-1)+x^2(x+1)-x^2(x-1)}{x^2(x+1)(x-1)} = \frac{-2x^2+2+x^2(x+1-x-(-1))}{x^2(x+1)(x-1)}
+  \end{displaymath}
+  \begin{displaymath}
+    \varphi'(x)=\frac{2}{x^2(x+1)(x-1)}
+  \end{displaymath}
+
+  Déterminons les limites de $\varphi$ aux bornes de son intervalle de définition~:
+  \begin{displaymath}
+    \lim_{x\to 1}\varphi(x)=\lim_{x\to 1}\frac{2}{x}+\ln\frac{x-1}{x+1}=\lim_{x\to 1}2+\ln\frac{x-1}{x+1}=-\infty\ \because\lim_{x\to 1}\ln\frac{x-1}{x+1}=\lim_{\chi\to 0}\ln \chi=-\infty
+  \end{displaymath}
+  \begin{displaymath}
+    \lim_{x\to+\infty}\varphi(x)=\lim_{x\to+\infty}\frac{2}{x}+\ln\frac{x-1}{x+1}=\lim_{x\to+\infty}\ln\left(1-\frac{2}{x+1}\right)=\ln 1=0
+  \end{displaymath}
+
+  On peut désormais établir le tableau de variations de $\varphi$ sur $]1,+\infty[$ (figure \ref{varphi})~:
+  \begin{figure}[h]
+   \begin{center}
+    \begin{tikzpicture}
+     \tkzTabInit{$x$ / 1, $x^2$ / 0.5, $x+1$ / 0.5, $x-1$ / 0.5, $\varphi'$ / 1, $\varphi$ / 1.5, $\varphi$ / 0.5}{1, $+\infty$}
+     \tkzTabLine{,+,}
+     \tkzTabLine{,+,}
+     \tkzTabLine{0,+,}
+     \tkzTabLine{d,+,}
+     \tkzTabVar{D- / $-\infty$, +/ 0}
+     \tkzTabLine{d,-,}
+    \end{tikzpicture}
+   \end{center}
+   \caption{Tableau de variations de $\varphi$.}
+   \label{varphi}
+  \end{figure}
+
+  On en déduit~:
+  \begin{equation}\label{PHI}
+    \forall x\in]1,+\infty[,\ \varphi(x)<0\therefore\forall n\in[\![2,+\infty[\![,\ \varphi(n)<0\ \because[\![2,+\infty[\![\subset]1,+\infty[
+  \end{equation}
+
+  De la conclusion précédente découle~:
+  \begin{align}
+    \varphi(n)=\frac{2}{n}+\ln\frac{n-1}{n+1}<0\iff e^{\left(\frac{2}{n}+\ln\frac{n-1}{n+1}\right)}<e^0\iff e^{\left(\frac{2}{n}\right)}\times\frac{n-1}{n+1}<1 \notag\\
+    \iff 0<1-e^{\left(\frac{2}{n}\right)}\times\frac{n-1}{n+1} \iff-e^{-\left(\frac{2}{n}\right)}\left(1-e^{\left(\frac{2}{n}\right)}\times\frac{n-1}{n+1}\right)<0 \label{PHI2}
+  \end{align}
+  Cependant on a~:
+  \begin{displaymath}
+      \forall n\geqslant2,\ f_n(-2)=1+\frac{-2}{n+1}-e^{-\left(\frac{2}{n}\right)}=-e^{-\left(\frac{2}{n}\right)}+\frac{n+1-2}{n+1}=-e^{-\left(\frac{2}{n}\right)}\left(1-e^{\left(\frac{2}{n}\right)}\times\frac{n-1}{n+1}\right)<0\text{ d'après (\ref{PHI2})}
+  \end{displaymath}
+
+  Supposons que $\alpha_n<-2<0$. On a donc~: $0<f_n(-2)<f_n(\alpha_n)$ par décroissance de $f_n$ sur $[\alpha_n, 0]$ or $f_n(-2)<0$, donc cette conclusion est absurde. L'hypothèse de départ est fausse et~: $-2<\alpha_n$.
+
+  Supposons maintenant que $x_n<-2$. Cela implique donc $f(x_n)<f_n(-2)<0$ par croissance de $f_n$ sur $]-\infty,\alpha_n]$ or $f_n(x_n)=0$, l'hypothèse de départ est donc aussi fausse, et $x_n>-2$.
+
+  \subsubsection{Majoration de $(x_n)_{n\geqslant 2}$}
+  On calcule~:
+  \begin{align*}
+    f_n\left(2n\ln\frac{n}{n+1}\right)&=1+\frac{2n\ln\frac{n}{n+1}}{n+1}-e^{2\ln\frac{n}{n+1}}=\frac{2n\ln\frac{n}{n+1}}{n+1}+1-\left(\frac{n}{n+1}\right)^2=\frac{2n}{n+1}\ln\frac{n}{n+1}+\frac{(n+1)^2-n^2}{(n+1)^2} \\
+    &=\frac{2n}{n+1}\ln\frac{n}{n+1}+\frac{2n+1}{(n+1)^2}=\frac{2n}{n+1}\left[\ln\frac{n}{n+1}+\frac{2n+1}{2n(n+1)}\right]
+  \end{align*}
+
+  Afin de déterminer le signe de ce nombre, on pose $\psi:x\mapsto\ln\frac{x}{x+1}+\frac{2x+1}{2x(x+1)}$, définie sur $\mathbb{R}_+^*$. On se propose d'en étudier les variations pour déterminer son signe. $\psi$ est dérivable si, et seulement si, $\frac{x}{x+1}>0$ et $2x(x+1)\neq 0$, soit $x>0$ et $x\neq 0$ et $x>-1$, donc finalement si $x>0$. $\psi$ est donc dérivable sur $\mathbb{R}_+^*$ et~:
+  \begin{align*}
+    \forall x\in\mathbb{R}_+^*,\ \psi'(x)&=\frac{2(2x(x+1))-(2x+1)(4x+2)}{\left[2x(x+1)\right]^2}+\frac{1}{x}-\frac{1}{x+1}=\frac{4x^2+4x-8x^2-4x-4x-2}{\left[2x(x+1)\right]^2}+\frac{x+1-x}{x(x+1)} \\
+    &=\frac{-4x^2-4x-2}{4\left[x(x+1)\right]^2}+\frac{1}{(x+1)x}=\frac{-2x^2-2x-1+2x(x+1)}{2\left[x(x+1)\right]^2}=-\frac{1}{2\left[x(x+1)\right]^2}
+  \end{align*}
+  or $\forall x\in\mathbb{R_+^*},\ \left[x(x+1)\right]^2>0\ \therefore \forall x\in]0;+\infty[,\ \psi'(x)<0$. Déterminons les limites de $\psi$ en 1 et en $+\infty$~:
+  \begin{align*}
+    \lim_{x\to 0}\frac{x+1}{x}=\lim_{x\to 0}1+\frac{1}{x}=+\infty\,; \lim_{x\to 0}\frac{2x+1}{2\left(x+1\right)^2}=\frac{1}{2}\,; \lim_{x\to 0}\frac{x}{x+1}\ln\frac{x}{x+1}=\lim_{\chi\to 0}\chi\ln \chi=0 \\
+    \text{D'où~: } \lim_{x\to 0}\psi(x)=\lim_{x\to 0}\ln\frac{x}{x+1}+\frac{2x+1}{2x(x+1)}=\lim_{x\to 0}\frac{x+1}{x}\left[\frac{x}{x+1}\ln\frac{x}{x+1}+\frac{2x+1}{2\left(x+1\right)^2}\right]=+\infty
+  \end{align*}
+  Par limite de somme, de produit et de fonction composée.
+  \begin{align*}
+    \lim_{x\to+\infty}\ln\frac{x}{x+1}=\lim_{x\to+\infty}\ln\left(1-\frac{1}{x+1}\right)=\ln1=0\ \because\lim_{x\to+\infty}\frac{1}{x+1}=0 \\
+    \text{On a donc~: }\lim_{x\to+\infty}\psi(x)=\lim_{x\to+\infty}\frac{2x+1}{2x(x+1)}+\ln\frac{x}{x+1}=\lim_{x\to+\infty}\frac{2x+1}{2x(x+1)}=\lim_{x\to+\infty}\frac{1+\frac{1}{2x}}{x+1}=0
+  \end{align*}
+
+  \begin{figure}[ht]
+   \begin{center}
+    \begin{tikzpicture}
+     \tkzTabInit{$x$ / 1, $\psi'$ / 1, $\psi$ / 1, $\psi$ / 1}{0, $+\infty$}
+     \tkzTabLine{d,-,}
+     \tkzTabVar{D+ / $+\infty$, -/ 0}
+     \tkzTabLine{d,+,}
+    \end{tikzpicture}
+   \end{center}
+   \caption{Tableau de variations de $\psi$.}
+   \label{varpsi}
+  \end{figure}
+
+  On peut maintenant construire le tableau des variations de $\psi$ (figure \ref{varpsi}). Du tableau de signe, on déduit~: $\forall x\in\mathbb{R}_+^*,\ \psi(x)>0$, d'où $\forall n\geqslant2,\ \psi(n)>0$. Cependant on a~:
+  \begin{displaymath}
+    \forall n\geqslant2,\ f_n\left(2n\ln\frac{n}{n+1}\right)=\frac{2n}{n+1}\left[\ln\frac{n}{n+1}+\frac{2n+1}{2n(n+1)}\right]=\frac{2n}{n+1}\psi(n)>0\ \because\frac{2n}{n+1}>0
+  \end{displaymath}
+
+  On suppose que $2n\ln\frac{n}{n+1}<x_n$, $f_n$ étant croissante sur $]-\infty,\alpha_n]$, on a~: $f_n\left(2n\ln\frac{n}{n+1}\right)<f_n(x_n)=0$ or $f_n\left(2n\ln\frac{n}{n+1}\right)>0$. L'hypothèse donnée est fausse et on en conclut~: $x_n<2n\ln\frac{n}{n+1}$.
+
+  \subsubsection{Conclusion}
+  On considère la définition du nombre dérivée en $x=1$ pour la fonction $x\mapsto\ln x$ de dérivée associée sur $\mathbb{R}_+^*$ $x\mapsto\frac{1}{x}$~:
+  \begin{equation}\label{limln}
+    \lim_{x\to 0}\frac{\ln(1+x)-\ln(1)}{x}=(\ln 1)'\iff \lim_{x\to 0}\frac{\ln{(x+1)}}{x}=\frac{1}{1}=1
+  \end{equation}
+
+  On cherche à exprimer la limite suivante à l'aide de la relation (\ref{limln})~:
+  \begin{align*}
+    \lim_{n\to+\infty}2n\ln\frac{n}{n+1}&=\lim_{n\to+\infty}-2n\ln\frac{n+1}{n} =\lim_{N\to 0}-2\frac{1}{N}\ln\frac{\frac{1}{N}+1}{\frac{1}{N}}\text{ en posant }N=\frac{1}{n}\\
+    &=\lim_{N\to 0}-2 \frac{\ln(1+N)}{N}=-2
+  \end{align*}
+  On remarque maintenant la relation suivante~:
+  \begin{displaymath}
+    \forall n\geqslant2,\ -2<x_n<2n\ln\frac{n}{n+1}
+  \end{displaymath}
+  Or, d'après le théorème des Gendarmes, puisquent $\lim_{n\to+\infty}-2=\lim_{n\to+\infty}2n\ln\frac{n}{n+1}=-2$, on conclut que $(x_n)_{n\geqslant2}$ converge, et~:
+  \begin{displaymath}
+    \lim_{n\to+\infty}x_n=-2\ \blacksquare
+  \end{displaymath}
+\end{document}

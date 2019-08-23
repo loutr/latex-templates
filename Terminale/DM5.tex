@@ -1,0 +1,178 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz,tkz-tab}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+
+\title{\textbf{Mathématiques~: Suite de points et arguments}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+\begin{document}
+ \maketitle 
+ \hrulefill
+ 
+ \vspace{2cm}
+ 
+ \hrulefill
+ 
+\section{Présentation de l'énoncé et conjecture}
+On considère la suite de points $(A_n)$, dans le repère $(O;\vec u,\vec v)$ telle que~:
+\begin{displaymath}
+ \left\{
+  \begin{array}{l}
+   A_0 (x_0\,;\,y_0) \\
+   A_{n+1}(x_{n+1}\,;\,y_{n+1})
+  \end{array}
+ \right.
+ \mathrm{avec}\ 
+ \left\{
+  \begin{array}{l}
+   (x_0\,;\,y_0) = (-3\,;\,4) \\
+   x_{n+1} = 0,8x_n - 0,6y_n \\
+   y_{n+1} = 0,6x_n + 0,8y_n
+  \end{array}
+ \right.
+\end{displaymath}
+On obtient ainsi par exemple les points $A_1(-4,8\,;\,1,4)$ et $A_2(-4,68\,;\,-1,76)$. L'objectif de l'exercice est de trouver un moyen de construire géométriquement les points de la suite. Après calcul, on place l'ensemble des points sur le plan ci-dessous. D'après celui-ci, on conjecture :
+\begin{displaymath}
+ \forall n \in\mathbb{N},\, A_n \in \mathscr{C}(O;5)
+\end{displaymath}
+
+\begin{figure}[h]
+ \begin{center}
+  \begin{subfigure}{0.5\textwidth}
+    \begin{tikzpicture}[scale=0.7]
+    \draw [thin, color=gray!25] (-6,-6) grid (6,6);
+    \draw (-6,0) -- (6,0);
+    \draw (0,-6) -- (0,6);
+    \draw[gray, dashed] (0,0) circle (5); 
+    \draw (0,0) -- (-3,4) node[midway, above, rotate=-53]{$-3+4i$};
+    \foreach \x in {0,1,...,19} \fill({5*cos(90+36.86989765*(1+\x))},{5*sin(90+36.86989765*(1+\x))}) circle (2.5pt) node [right] {$\mathrm{A_{\x}}$};
+    \draw[->, >=stealth, thick] (0,0)--(1,0) node[below]{$\vec u$};
+    \draw[->, >=stealth, thick] (0,0)--(0,1) node[left]{$\vec v$}; 
+    \node[below left] at (0,0){O};
+    \draw[->] (-3.24,4.32) arc (126.87:163.74:5.4) node[midway, above left]{$\theta$};
+    \end{tikzpicture}
+    \caption[Figure 1]{Représentation des 20 premiers points de la suite $(A_n)$ sur un plan. Les autres indications concèrnent la suite de l'exercice.}
+  \end{subfigure}
+  \begin{subfigure}{0.4\textwidth}
+    \fbox{\begin{minipage}{8cm}
+    \begin{verbatim}
+
+    Variables : \\
+        i, x, y, t : nombres réels \\
+    
+    Initialisation : \\
+        x prend la valeur -3 \\
+        y prend la valeur 4 \\
+
+    Traitement : \\
+    Pour i allant de 0 à 20 \\
+        Construire le point de coordonnées (x, y) \\
+        t prend la valeur x \\
+        x prend la valeur 0,8x - 0,6y \\
+        y prend la valeur 0,6t + 0,8y \\
+    Fin pour
+    
+    \end{verbatim}
+    \end{minipage}}
+    \caption{Algorithme permettant le calcul des coordonnées des points $A_0$ à $A_{19}$.}
+  \end{subfigure}
+ \end{center}
+\end{figure}
+
+\section{Étude de la position des points}
+\subsection{Étude des modules}
+Soit, $\forall n\in\mathbb{N},\,z_n\in\mathbb{C},\,z_n=x_n+iy_n$ l'affixe du point $A_n$~; ainsi que la suite $(u_n)$ définie par~: $u_n = \abs{z_n}$. Soit la propriété $P_n$ telle que $P_n : u_n = 5$. À $n=0$, on a~:
+\begin{displaymath}
+ z_0 = -3 + 4i\ ; u_0 = \abs{z_0} = \sqrt{(-3)^2 + 4^2} = \sqrt{9+16} = 5
+\end{displaymath}
+$P_0$ est donc vraie. Supposons maintenant qu'il existe un entier naturel $n$ tel que $P_n$ est vrai. Montrons que cette propriété est héréditaire, c'est-à-dire qu'elle est vraie au rang $n+1$. On a donc~:
+\begin{align*}
+\abs{z_n} &=\abs{x_n + iy_n} = 5 \Leftrightarrow\abs{0,8 + 0,6i}\abs{x_n+iy_n}=5\abs{0,6+0,8i} \\
+&\Leftrightarrow\abs{0,8x_n + 0,8iy_n + 0,6ix_n - 0,6y_n}=5\sqrt{0,6^2+0,8^2} \\
+&\Leftrightarrow\abs{(0,8x_n - 0,6y_n) + (0,6x_n + 0,8y_n)i} = 5\sqrt{0,36 + 0,64} \Leftrightarrow \abs{x_{n+1}+iy_{n+1}} = 5\cdot 1 \Leftrightarrow \abs{z_{n+1}} =5
+\end{align*}
+$P_{n+1}$ est vrai, on en déduit donc $(P_n)\Rightarrow (P_{n+1})$, $P_n$ est donc héréditaire. D'après le principe du raisonnement par récurrence, on en conclut~:
+\begin{displaymath}
+ \forall n\in\mathbb{N},\, \abs{z_n} = 5 \Leftrightarrow O\!A_n=5 \Leftrightarrow A_n\in \mathscr{C}(O;5)
+\end{displaymath}
+
+\subsection{Étude des arguments}
+
+\begin{figure}[h]
+  \begin{center}
+   \begin{tikzpicture}
+    \tkzTabInit{$\theta$ / 1, $-\sin(\theta)$ / 1, $\cos(\theta)$ / 1.5}{$0$, $\dfrac{\pi}{2}$}
+    \tkzTabLine{, -, }
+    \tkzTabVar{+/ $1$, -/ $0$}
+   \end{tikzpicture}
+  \end{center}
+ \caption{Tableau de variations de la fonction cosinus.}
+\end{figure}
+ On cherche à prouver qu'il existe un réel $\theta$ tel que~: $\theta \in\left[0;\frac{\pi}{2}\right]\!,\,\cos\theta=0,8$. Comme le montre le tableau de variations ci-dessus, la fonction cosinus est définie, continue et strictement décroissante sur $\left[0;\frac{\pi}{2}\right]$, d'intervalle image associé $\left[0;1\right]$, or $0,8\in\left[0;1\right]$~; donc d'après le corollaire du théorème des valeurs intermédiaires, $\exists\theta\in\left[0 ;\frac{\pi}{2}\right]\!, \cos\theta = 0,8$. 
+ 
+ De même~:
+ \begin{displaymath}
+  \forall\theta\in\mathbb{R}, \cos^2 \theta\,+\,\sin^2 \theta=1 \Leftrightarrow\sin\theta = \sqrt{1 - \cos^2 \theta} = \sqrt{1 - (0,8)^2} = \sqrt{0,36} = 0,6 \,\,\,\mathrm{ou}\,\sin\theta = -0,6
+ \end{displaymath}
+Cependant $\theta \in\left[0;\frac{\pi}{2}\right] \Rightarrow\sin\theta\geqslant0$, donc $\sin\theta = 0,6$.
+
+Ensuite, on calcule~:
+\begin{align*}
+ e^{i\theta}z_n &= (\cos\theta + i\sin\theta)(x_n +iy_n) = (0,8 + 0,6i)(x_n+ iy_n)=0,8x_n + 0,8iy_n + 0,6ix_n - 0,6y_n \\
+ e^{i\theta}z_n &= (0,8x_n - 0,6y_n) + (0,6x_n + 0,8y_n)i = x_{n+1} + iy_{n+1}\\
+ e^{i\theta}z_n &= z_{n+1}
+\end{align*}
+
+Considérons désormais la propriété $Q_n$ telle que~: $Q_n : z_n = e^{in\theta}z_0$. À $n=0$~:
+\begin{displaymath}
+ e^{i\cdot0\cdot\theta}z_0 = e^0 z_0 = z_0
+\end{displaymath}
+$Q_0$ est donc vraie. Supposons qu'il existe un entier $n$ tel que $Q_n$ est vraie, montrons maintenant qu'elle est héréditaire, c'est-à-dire que $Q_{n+1}$ est vraie~; on a donc~:
+\begin{displaymath}
+ z_n = e^{in\theta}z_0 \Leftrightarrow e^{i\theta}z_n = e^{i\theta}e^{in\theta}z_0 \Leftrightarrow z_{n+1} = e^{i(\theta + n\theta)}z_0 \Leftrightarrow z_{n+1}=e^{i(n+1)\theta}z_0
+\end{displaymath}
+Donc $Q_{n+1}$ est vrai, d'où $(Q_n) \Rightarrow (Q_{n+1})$, la propriété est donc héréditaire. D'après le principe de raisonnement par récurrence, on en déduit~:
+\begin{displaymath}
+ \forall n\in\mathbb{N},\, z_n = e^{in\theta}z_0
+\end{displaymath}
+On se propose de trouver un argument de $z_0$. Calculons~:
+$\cos\left(\theta+\dfrac{\pi}{2}\right) = -\sin\theta = -0,6\,;\ \sin\left(\theta +\dfrac{\pi}{2}\right) = \cos\theta = 0,8$. Soit $a$ un nombre complexe tel que~:
+\begin{displaymath}
+ a = 5\left[\cos\left(\theta +\dfrac{\pi}{2}\right)+i\sin\left(\theta +\dfrac{\pi}{2}\right)\right] = 5(-0,6 + 0,8i) = -3 + 4i = z_0
+\end{displaymath}
+or $\abs{z_0}=5$, $a$ est donc une écriture trigonométrique de $z_0$, ce dont découle~: $\arg z_0 \equiv \theta + \dfrac{\pi}{2} \pmod{2\pi}$. Ainsi, on peut écrire~: $z_0 = 5e^{i\left(\theta+\frac{\pi}{2}\right)}$.
+\begin{align*}                                                                                                                                                                                                                    
+ \textrm{Or } \forall n\in\mathbb{N},\, z_n = e^{in\theta}z_0 & \Leftrightarrow z_n = e^{in\theta}5e^{i\left(\theta+\frac{\pi}{2}\right)} \Leftrightarrow z_n = 5e^{in\theta+i\left(\theta+\frac{\pi}{2}\right)} = 5e^{i\left[(n+1)\theta+\frac{\pi}{2}\right]} \\
+ & \Leftrightarrow \arg z_n \equiv (n+1)\theta+\frac{\pi}{2} \pmod{2\pi}
+\end{align*}
+Finalement, on cherche une manière de construire, pour tout entier $n$, $A_{n+1}$ à partir de $A_n$. Intéressons-nous à l'argument de $z_0$~:
+\begin{displaymath}
+ \arg z_0 \equiv \theta + \frac{\pi}{2} \pmod{2\pi} \Leftrightarrow \left(\vec u,\,\overrightarrow{O\!A_0}\right)\equiv \theta + (\vec u,\,\vec v) \pmod{2\pi} \Leftrightarrow \theta\equiv \left(\vec u,\,\overrightarrow{O\!A_0}\right) + (\vec v,\,\vec u) \equiv \left(\vec v,\,\overrightarrow{O\!A_0}\right) \pmod{2\pi}
+\end{displaymath}
+L'angle $\theta$ correspond donc à l'angle entre l'axe verticale du repère et la droite $(O\!A_0)$. Cependant il correspond aussi à l'écart d'argument des affixes de deux points consécutifs, en effet~:
+\begin{align*}
+ \left(\overrightarrow{O\!A_n},\,\overrightarrow{O\!A_{n+1}}\right)&\equiv \left(\overrightarrow{O\!A_n},\,\vec u\right) + \left(\vec u,\,\overrightarrow{O\!A_{n+1}}\right) \equiv \left(\vec u,\,\overrightarrow{O\!A_{n+1}}\right) - \left(\vec u,\,\overrightarrow{O\!A_n},\right) \equiv \arg z_{n+1} -\arg z_n \pmod{2\pi} \\
+ \left(\overrightarrow{O\!A_n},\,\overrightarrow{O\!A_{n+1}}\right)&\equiv (n+2)\theta+\frac{\pi}{2} -\left((n+1)\theta+\frac{\pi}{2}\right) \equiv (n+2)\theta - (n+1)\theta + \frac{\pi}{2} -\frac{\pi}{2}\equiv\theta\pmod{2\pi}
+\end{align*}
+On en conclut~:
+
+Afin de construire les points $A_{n+1}$ à partir de $A_n$, il faut récupérer au compas l'angle $\left(\vec v,\,\overrightarrow{O\!A_0}\right)$, séparant l'axe vertical du repère et $(O\!A_0)$ puis le retracer à partir du point $A_0$ pour couper le cercle en $A_1$ (en poursuivant dans le sens trigonométrique)~; répéter l'action en $A_1$ pour obtenir $A_2$, et de manière générale, tracer cet angle en $A_n$ pour construire $A_{n+1}$.
+
+\begin{figure}[b]
+ \begin{center}
+  Document réalisé avec \LaTeX.
+ \end{center}
+\end{figure}
+
+\end{document}

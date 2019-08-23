@@ -1,0 +1,279 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+% \usepackage{enumitem}
+\usepackage{amssymb, amsmath}
+\usepackage[top=3cm, bottom=3cm, left=2.3cm, right=2.3cm]{geometry}
+
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\mat}{mat}
+
+\title{DM \No 18~: Matrices circulantes \\ \normalsize Utilisation de plusieurs techniques dans le calcul d'un déterminant}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle{}
+
+  \paragraph{} On indexera par la suite les matrices à partir de 0. Soit $n\in\mathbb{N}^*$ et $S = (a_0, a_1,\dots, a_{n-1}) \in \mathbb{C}^n$. On appelle \textit{matrice circulante} la matrice $C(S)$ définie par~:
+  \[
+    (c_{k,j})_{0 \le k, j \le n - 1} = C(S) =
+    \begin{pmatrix}
+      a_0 & a_1 & \cdots & a_{n-1} \\
+      a_{n-1} & a_0 & \cdots & a_{n-2} \\
+      \vdots  & \ddots  & \ddots & \vdots  \\
+      a_1 & a_2 & \cdots & a_0
+    \end{pmatrix}
+  \]
+  On pose $\sigma$ la permutation sur $I = [\![0, n-1]\!]$ telle que $\sigma = \begin{pmatrix} n - 1 & \cdots & 1 & 0 \end{pmatrix}$. On notera tout d'abord qu'une expression similaire de $\sigma$ est, pour $k\in I$, $\sigma(k) = k - 1 \mod n$, où mod est l'opérateur du reste dans la division euclidienne. Il vient alors naturellement que $\sigma^l(k) = k - l \mod n$. On établit la relation de récurrence entre les coefficients de $C(S)$~:
+  \[
+    \left\{
+      \begin{aligned}
+        \forall j \in I,&\: c_{0, j} = a_j \\
+        \forall k, j \in [\![0, n-2]\!] \times I,&\: c_{k+1, j} = c_{k, \sigma(j)}
+      \end{aligned}
+    \right.
+    \Longrightarrow c_{k, j} = a_{\sigma^k(j)}
+  \]
+  On posera aussi $\forall k\in I,\: \omega_k = e^{\frac{2ik\pi}{n}} = \omega^k$ où $\omega = e^{\frac{2i\pi}{n}}$, et finalement on considérera le polynôme $P\in\mathbb{C}[X]$ tel que $P = \sum_{j\in I} a_j X^j$. On se propose ainsi de trouver l'expression du déterminant de $C(S)$ selon plusieurs méthodes.
+
+  \section*{Utilisation du déterminant de Vandermonde}
+
+  \paragraph{} On pose $\Omega = (\omega_k^j)_{0 \le k, j \le n - 1} = \left(\omega^{kj}\right)_{0 \le k, j \le n - 1}$. Cherchons maintenant à exprimer les coefficients de la matrice $B = (b_{kj})_{0 \le k, j \le n - 1} = C(S) \times \Omega$. On évalue selon la définition du produit matriciel~:
+  \[
+    \forall j\in I,\: b_{k, j} = \sum_{l\in I} c_{k,l} \times \omega_l^j = \omega^{kj} \sum_{l\in I} c_{k,l} \times \omega^{(l-k)j} = \omega_k^j \sum_{l\in I} a_{\sigma^k(l)} \times \omega_j^{(l-k)}
+  \]
+  Or $l < n \wedge k > 0 \Longrightarrow l - k < n$. Si $l - k \geq 0$, alors $\omega_j^{(l-k)} = \omega^{(l-k \mod n)}$. Sinon, $l-k < 0 \Longrightarrow 0 < l - k + n < n$ et alors, en utilisant $\omega_j^n = 1$, il vient $\omega_j^{(l-k)} = \omega_j^{(l-k)} \times \omega_j^n = \omega_j^{(l-k)} \times \omega_j^n = \omega_j^{(l-k+n)} = \omega_j^{(l-k \mod n)}$. Dans tous les cas, on a $\omega_j^{l-k} = \omega_j^{l - k \mod n} = \omega_j^{\sigma^k(l)}$. D'où, en changeant ensuite de variable ($\sigma$ étant une permutation de $I$), on obtient~:
+  \[
+    \forall j\in I,\: b_{k, j} = \omega_k^j \sum_{l\in I} a_{\sigma^k(l)} \times \omega_j^{(l-k)}
+    = \omega_k^j \sum_{l\in I} a_{\sigma^k(l)} \times \omega_j^{\sigma^k(l)}
+    = \omega_k^j \sum_{l\in I} a_l \times \omega_j^l
+  \]
+  \[
+    \therefore\forall (k, j) \in I^2,\: b_{k,j} = \omega_k^j \cdot P(\omega_j)
+  \]
+
+  \paragraph{} Calculons maintenant le déterminant de $B$, en factorisant les colonnes par $n$-linéarité~:
+  \begin{align*}
+    \det B &=
+    \begin{vmatrix}
+      b_{1,1} & b_{1,2} & \cdots & b_{1,n} \\
+      b_{2,1} & b_{2,2} & \cdots & b_{2,n} \\
+      \vdots  & \vdots  & \ddots & \vdots  \\
+      b_{m,1} & b_{m,2} & \cdots & b_{m,n}
+    \end{vmatrix} =
+    \begin{vmatrix}
+      \omega_0^0 P(\omega_0) & \omega_0^1 P(\omega_1)& \cdots & \omega_0^{n-1}P(\omega_{n-1}) \\
+      \omega_1^0 P(\omega_0)& \omega_1^1 P(\omega_1)& \cdots & \omega_1^{n-1} P(\omega_{n-1}) \\
+      \vdots  & \vdots  & \ddots & \vdots  \\
+      \omega_{n-1}^0 P(\omega_0)& \omega_{n-1}^1 P(\omega_1)& \cdots & \omega_{n-1}^{n-1} P(\omega_{n-1})
+    \end{vmatrix} \\ &= P(\omega_0) \times \dots \times P(\omega_{n-1}) \times
+    \begin{vmatrix}
+      \omega_0^0 & \omega_0^1 & \cdots & \omega_0^{n-1} \\
+      \omega_1^0 & \omega_1^1 & \cdots & \omega_1^{n-1} \\
+      \vdots  & \vdots  & \ddots & \vdots  \\
+      \omega_{n-1}^0 & \omega_{n-1}^1 & \cdots & \omega_{n-1}^{n-1}
+    \end{vmatrix} = \prod_{k\in I} P(\omega_k) \times \det \Omega
+  \end{align*}
+  Néanmoins $\det(\Omega)$ correspond au déterminant de Vandermonde pour la famille $(\omega_k)_{k\in I}$, les $\omega_k$ étant distincts deux à deux, on en conclut que $\det(\Omega) \neq 0$ d'après la formule dudit déterminant. Par multiplicativité du déterminant, on a alors~:
+  \[
+    \det B = \det(C(S)\times \Omega) = \det(C(S)) \times \det(\Omega) \Longrightarrow \prod_{k\in I} P(\omega_k) \times \det \Omega =  \det(C(S)) \times \det(\Omega)
+  \]
+  En simplifiant, il vient finalement~:
+  \[
+    \det C(S) = \prod_{k\in I} P(\omega_k)
+  \]
+
+  \section*{Méthode polynomiale}
+
+  On considère le polynôme $Q = \det C(X, a_1, \dots, a_{n-1})$. Ainsi les $X$ forment les coefficients diagonaux de la matrice associée. Écrivons l'expression générale du déterminant~:
+  \begin{align*}
+    \det Q &= \sum_{\sigma\in\mathfrak{S}(I)} \varepsilon(\sigma) \prod_{j = 0}^{n - 1} c_{\sigma(j),j} \quad\text{où $\mathfrak{S}(I)$ désigne l'ensemble des permutations de $I$.} \\
+    &= \sum_{\substack{\sigma\in\mathfrak{S}(I) \\ \sigma \neq \mathrm{Id}}} \varepsilon(\sigma) \prod_{j\in I} c_{\sigma(j),j} + \varepsilon(\mathrm{Id}) \prod_{j\in I} c_{j,j}
+    = \underbrace{\sum_{\substack{\sigma\in\mathfrak{S}(I) \\ \sigma \neq \mathrm{Id}}} \varepsilon(\sigma) \prod_{j\in I} \underbrace{c_{\sigma(j),j}}_{\exists j\in I,\: \sigma(j) \neq j}}_{\deg < n} + 1 \times X^n
+  \end{align*}
+  Le produit des $c_{\sigma(j), j}$ ne peut en effet contenir au plus que $n - 1$ fois le terme $X$ (car au moins un coefficient n'est pas sur la diagonale). D'où le degré du polynôme $Q$ est $n$. On note que par ailleurs, $\dom Q = 1$.
+
+  \paragraph{} Par la suite on notera $I\setminus\{0\} = [\![1, n-1]\!] = I^*$. On considère la matrice $B = C \left(-\sum_{j\in I^*} a_j \omega_i^j, a_1, \dots, a_{n-1}\right)$, c'est-à-dire la matrice associée à $Q$ évalué en les $-\sum_{j\in I^*} a_j \omega_i^j$ pour $i\in I$. On note $(\beta_j)_{j\in I}$ les vecteurs associés aux colonnes de $B$ et $\beta_{j, l}$ leur $l$-ième coordonnée. Démontrons que $(\beta_j)_{j\in I}$ est liée. On détermine préalablement une expression de $\beta_j$, en utilisant la relation de récurrence sur les coefficients $c_{k, j}$ définie en introduction. Ainsi on a~:
+  \[
+    \forall (j, l)\in I^2,\: \beta_{j, l} =
+    \begin{cases}
+      a_{\sigma^l(j)} & \text{si } l \neq j \\
+      -\sum_{j\in I^*} a_j \omega_i^j & \text{si } l = j
+    \end{cases}
+  \]
+
+  On peut maintenant évaluer la valeur de la combinaison linéaire $\sum_{j\in I} \omega_i^j \beta_j$ sur chaque composante (ligne) $l$~:
+  \[
+     \sum_{j\in I} \omega_i^j \beta_{j,l} = \underbrace{\omega_i^l \left(-\sum_{j\in I^*} a_j \omega_i^j\right)}_{\text{terme de la diagonale ($l = j$)}} + \sum_{\substack{j\in I \\ j \neq l}} \omega_i^j a_{\sigma^l(j)}
+     = \sum_{\substack{j\in I \\ j \neq l}} a_{\sigma^l(j)}\omega_i^j - \sum_{j\in I^*} a_j \omega_i^{j+l}
+  \]
+  On effectue alors dans la première somme le changement de variable $u = \sigma^l(j)$. La valeur non atteinte par la somme correspond alors à~: $j\neq l \iff u = \sigma^l(j) \neq \sigma^l(l) = l - l \mod n = 0$. Par ailleurs, $\omega_i^j = \omega_i^{\sigma^{-l}(u)} = \omega_i^{u + l \mod n} = \omega_i^{u+l}$. On peut dès lors injecter dans l'expression précédente pour conclure~:
+  \[
+    \sum_{j\in I} \omega_i^j \beta_{j,l} = \sum_{\substack{u\in I \\ u \neq 0}} a_{u}\omega_i^{u+l} - \sum_{j\in I^*} a_j \omega_i^{j+l} = 0 \Longrightarrow \sum_{j\in I} \omega_i^j \beta_j = 0
+  \]
+  Or $(\omega_i^0, \omega_i, \dots, \omega_i^{n-1}) \neq (0, \dots, 0)$, on en conclut que la famille $(\beta_j)_{j\in I}$ est liée. Par conséquent $\det B = 0$, c'est-à-dire, $\det C\left(-\sum_{j\in I^*} a_j \omega_i^j, a_1, \dots, a_{n-1}\right) = 0$, soit encore $Q\left(-\sum_{j\in I^*} a_j \omega_i^j\right) = 0$. En terme de polynômes, on en conclut que $\forall i\in I,\: X + \sum_{j\in I^*} a_j \omega_i^j \mid Q$.
+
+  \paragraph{} On suppose maintenant que les $\sum_{j\in I^*} a_j \omega_i^j$ sont distincts deux à deux selon les valeurs de $i\in I$. Ainsi $Q$ possède $\# I = n$ racines distinctes, or il est de degré $n$~; on peut donc en déduire l'écriture de la forme factorisée de $Q$. Sachant que $\dom Q = 1$, il vient~:
+  \[
+    Q(X) = 1 \times \prod_{i\in I} \left(X + \sum_{j\in I^*} a_j \omega_i^j\right) = \det C(X, a_1, \dots, a_{n-1})
+  \]
+  On peut alors évaluer $Q$ en $a_0$ pour faire apparaître que~:
+  \[
+    Q(a_0) = C(S) = \prod_{i\in I} \left(a_0 + \sum_{j\in I^*} a_j \omega_i^j\right)
+    = \prod_{i\in I} \left(a_0 \times \omega_i^0 + \sum_{j\in I^*} a_j \omega_i^j\right)
+    = \prod_{i\in I} \left(\sum_{j\in I} a_j \omega_i^j\right) = \prod_{i\in I} P(\omega_i)
+  \]
+
+  \begin{flushright}
+    \small On ne traitera pas ici le cas où certains $\sum_{j\in I^*} a_j \omega_i^j$ sont égaux.
+  \end{flushright}
+
+  \section*{Diagonalisation}
+
+  \paragraph{} On considère la matrice $(j_{m, l})_{0 \leq m, l \leq n-1} = J = C(0, 1, 0, \dots, 0)$. Alors on écrit, en utilisant la définition donnée en introduction~:
+  \[
+    j_{m, l} = \begin{cases}
+      1 &\text{si } \sigma^m(l) = 1 \\
+      0 &\text{sinon}
+    \end{cases}
+  \]
+  On considère la propriété $(L_k)$ suivante, pour $k\in I$~:
+  \[
+    (_k j_{m, l})_{0 \leq m, l \leq n-1} = J^k = C(0, \dots, 0, 1, 0, \dots, 0) \quad\text{où 1 est la $k$-ième coordonnée} \iff _kj_{m, l} = \begin{cases}
+      1 &\text{si } \sigma^m(l) = k \\
+      0 &\text{sinon}
+    \end{cases}
+  \]
+  $(L_1)$ est vraie par définition, et $(L_0)$ est vraie en considérant $J^0 = I_n$, où $I_n$ désigne la matrice identité d'ordre $n$~; en effet $j_{m, l} = 1 \iff \sigma^m(l) = 0 \iff l - m \mod n = 0 \iff l - m = 0$, c'est-à-dire uniquement les coefficients diagonaux. Supposons maintenant l'existence d'un entier $k\in I\setminus\{n-1\}$ tel que $(L_k)$ est vraie. Considérons alors l'expression de $J^{k+1}$~:
+  \begin{align*}
+     J^{k+1} = J \times J^k \Longrightarrow \forall (m, l)\in I^2,\:
+     _{k+1}j_{m, l} = \sum_{p\in I} j_{m, p} \times {}_k j_{p, l} = \underbrace{j_{m, \sigma^{-m}(1)}}_{1} \times {}_kj_{\sigma^{-m}(1), l} + \sum_{\substack{p\in I \\ p \neq \sigma^{-m}(1)}} \underbrace{j_{m, p}}_{0} \times {}_k j_{p, l}
+  \end{align*}
+  En effet $p \neq \sigma^{-m}(1) \iff \sigma^m(p) \neq 1 \iff j_{m, p} = 0$. On a alors, en appliquant $(L_k)$~:
+  \begin{align*}
+    _{k+1} j_{m, l} = {}_kj_{\sigma^{-m}(1), l} = \begin{cases}
+      1 &\text{si } \sigma^{\sigma^{-m}(1)}(l) = k \\
+      0 &\text{sinon}
+    \end{cases}
+  \end{align*}
+  Or
+  \begin{align*}
+    \sigma^{\sigma^{-m}(1)}(l) = k &\iff \sigma^{1 + m \mod n}(l) = k \iff \sigma^{1 - 1 + m \mod n}(l) = \sigma^{-1}(k)\\
+    & \iff \sigma^m(l) = k + 1 \mod n = k + 1 \quad \because 0 < k + 1 < n
+  \end{align*}
+  On établit finalement~:
+  \begin{align*}
+    _{k+1} j_{m, l} = \begin{cases}
+      1 &\text{si } \sigma^{\sigma^{-m}(1)}(l) = k \\
+      0 &\text{sinon}
+    \end{cases}
+    = \begin{cases}
+      1 &\text{si } \sigma^m(l) = k + 1 \\
+      0 &\text{sinon}
+    \end{cases} \iff (L_{k+1})
+  \end{align*}
+  on conclut alors par récurrence, et~:
+  \[
+    \forall k\in I,\: J^k = C(0, \dots, 0, 1, 0, \dots, 0) \quad\text{où 1 est la $k$-ième coordonnée}
+  \]
+
+  \paragraph{} En utilisant les propriétés sur les matrices, il vient naturellement~:
+  \begin{align*}
+    C(S) &= C(a_0, a_1, \dots, a_{n-1}) = C(a_0, 0, \dots, 0) + C(0, a_1, \dots, 0) + \dots +  C(0, \dots, 0, a_{n-1}) \\
+    &= a_0C(1, 0, \dots, 0) + \dots + a_{n-1}C(0, \dots, 0, 1) = \sum_{k\in I}a_k J^k = P(J)
+  \end{align*}
+
+  \paragraph{} On note maintenant $Q = \det(J - XI_n)$. Explicitons l'expression de $Q$ en développant le déterminant sur la première colonne, puis utilisons les formules des déterminants des matrices remarquables~:
+  \begin{align*}
+    Q &= \begin{vmatrix}
+      -X & 1 & \cdots & 0 \\
+      0 & -X & \cdots & 0 \\
+      \vdots  & \ddots  & \ddots & \vdots  \\
+      1 & 0 & \cdots & -X
+    \end{vmatrix} = -X \times
+    \underbrace{\begin{vmatrix}
+       -X & \cdots & 0 \\
+      \vdots  & \ddots  & \vdots  \\
+       0 & \cdots & -X
+    \end{vmatrix}}_{\text{matrice scalaire}} + 1 \times (-1)^{1+n} \times
+    \underbrace{\begin{vmatrix}
+      1 & 0 & \cdots & 0 \\
+      -X & 1 & \cdots & 0 \\
+      \vdots  & \ddots  & \ddots & \vdots  \\
+      0 & \cdots & -X & 1
+    \end{vmatrix}}_{\text{matrice triangulaire inférieure}} \\
+    &= -X \prod_{i=1}^{n-1} (-X) + (-1)^{1+n} \prod_{i=1}^{n-1}1 = (-1)^n X^n + (-1)^n(-1) = (-1)^n(X^n - 1)
+  \end{align*}
+  On établit alors l'expression des racines de $Q$~:
+  \[
+    \forall \lambda\in\mathbb{C},\: Q(\lambda) = 0 \iff (-1)^n(\lambda^n - 1) = 0 \iff \lambda^n = 1 \iff \exists k\in I,\: \lambda = \omega_k
+  \]
+  Pour toute valeur de $\lambda$ racine de $Q$, on a alors $\det(J - \lambda I_n) = 0$, c'est-à-dire que l'application linéaire canoniquement associée à $J - \lambda I_n$ dans $\mathbb{R}^n$ n'est pas bijective, donc pas injective, ce qui se traduit, sachant que cette application est linéaire, par~: $\Ker(J - \lambda I_n) \neq \{0\}$.
+
+  \paragraph{} Dans la suite de l'exercice, on associera aux matrices et à leurs endomorphismes canoniquement associées les mêmes notations~; dans $\mathbb{R}^n$, les matrices considérées étant de format $n \times n$.
+
+  \paragraph{} On note maintenant $\forall k\in I,\: A_k = \Ker(J - \omega_k I_n)$. On remarque préalablement la caractérisation suivante de ces espaces~:
+  \[
+    \forall u,\: u\in A_k \iff (J - \omega_k I_n)u = 0 \iff J(u) = \omega_k u
+  \]
+  Démontrons que $\bigoplus_{k\in I} A_k$ est en somme directe. Considérons alors la propriété $(M_k)~: \bigoplus_{i=0}^k A_i$ est en somme directe pour $k\in I$. À $k=0$, le résultat est évident. Supposons maintenant $(M_k)$ vraie pour $k\in I\setminus\{n-1\}$. Soit $x\in A_{k+1} \cap \bigoplus_{i=0}^k A_i$, $x$ se décompose de manière unique sur $\bigoplus_{i=0}^k A_i$. Avec les notations naturelles, il vient~:
+  \[
+    x = \sum_{i=0}^k x_i \Longrightarrow \left\{\begin{aligned}
+      J(x) &= \sum_{i=0}^k J(x_i) \\
+      \omega_{k+1} x &= \sum_{i=0}^k \omega_{k+1} x_i
+    \end{aligned}\right.
+    \Longrightarrow \left\{\begin{aligned}
+      \omega_{k+1} x &= \sum_{i=0}^k \omega_i x_i \because \forall i,\: x_i \in A_i\\
+      \omega_{k+1} x &= \sum_{i=0}^k \omega_{k+1} x_i
+    \end{aligned}\right.
+    \Longrightarrow \sum_{i=0}^k \omega_i x_i = \sum_{i=0}^k \omega_{k+1} x_i
+  \]
+  Par unicité de la décomposition (la somme étant directe), on en conclut, sachant que les $\omega_k$ sont tous distincts, que les $x_i$ sont nuls et par conséquent $x=0$. Il vient~:
+  \[
+    A_{k+1} \cap \bigoplus_{i=0}^k A_i = \{0\} \iff \bigoplus_{i=0}^{k+1} A_i \quad\text{est en somme directe} \iff (M_{k+1})
+  \]
+  D'après le principe de raisonnement par récurrence, il vient alors que $\bigoplus_{k\in I} A_k$ est en somme directe. On construit alors une famille de vecteurs non nuls $\mathcal{B} = (u_0, \dots, u_{n-1}) \in A_0 \times \dots \times A_{n-1}$. $\mathcal{B}$ est libre par construction, d'après le résultat précédent. Par ailleurs $\mathcal{B}$ possède $n$ vecteurs, or $\dim \mathbb{R}^n = n$, donc $\mathcal{B}$ est une base de l'espace. Il vient, d'après la caractérisation des éléments de $A_k$, que~:
+  \[
+    \mat_{\mathcal{B}}(J) = \begin{pmatrix}
+      \omega_0 & 0 & \cdots & 0 \\
+      0 & \omega_1 & \ddots & 0 \\
+      \vdots & \ddots & \ddots & \vdots \\
+      0 & 0 & \cdots & \omega_{n-1}
+    \end{pmatrix} = D
+  \]
+
+  \paragraph{} D'après la formule du changement de base, il existe $P$ une matrice inversible telle que $J = PDP^{-1}$. Par une récurrence triviale, on obtient ainsi~: $\forall k\in I,\: J^k = PD^kP^{-1}$. D'après une précédente formule, il vient finalement~:
+  \begin{align*}
+    PC(S)P^{-1} &= P \times P(J) \times P^{-1} = P \cdot\left(\sum_{k\in I} a_k J^k\right) \cdot P^{-1} = \sum_{k\in I} a_k PJ^kP^{-1} = \sum_{k\in I} a_k D^k \\
+    &= \sum_{k\in I} a_k \begin{pmatrix}
+      \omega_0^k & 0 & \cdots & 0 \\
+      0 & \omega_1^k & \ddots & 0 \\
+      \vdots & \ddots & \ddots & \vdots \\
+      0 & 0 & \cdots & \omega_{n-1}^k
+    \end{pmatrix} =
+    \begin{pmatrix}
+      \sum_{k\in I} a_k\omega_0^k & 0 & \cdots & 0 \\
+      0 & \sum_{k\in I} a_k\omega_1^k & \ddots & 0 \\
+      \vdots & \ddots & \ddots & \vdots \\
+      0 & 0 & \cdots & \sum_{k\in I} a_k\omega_{n-1}^k
+    \end{pmatrix} \\
+    &= \begin{pmatrix}
+      P(\omega_0) & 0 & \cdots & 0 \\
+      0 & P(\omega_1) & \ddots & 0 \\
+      \vdots & \ddots & \ddots & \vdots \\
+      0 & 0 & \cdots & P(\omega_{n-1})
+    \end{pmatrix}
+  \end{align*}
+  Par invariance du déterminant par changement de base, on obtient alors~:
+  \[
+    \det C(S) = \begin{vmatrix}
+      P(\omega_0) & 0 & \cdots & 0 \\
+      0 & P(\omega_1) & \ddots & 0 \\
+      \vdots & \ddots & \ddots & \vdots \\
+      0 & 0 & \cdots & P(\omega_{n-1})
+    \end{vmatrix} = \prod_{k\in I} P(\omega_k)
+  \]
+\end{document}

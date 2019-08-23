@@ -1,0 +1,231 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+
+\usepackage[top=1.9cm, bottom=1.9cm, left=1.9cm, right=1.9cm]{geometry}
+\usepackage{amssymb, amsmath, mathrsfs}
+\usepackage{tikz,tkz-tab}
+\usepackage{appendix}
+\usepackage{subcaption}
+\usepackage{tabu}
+
+\newcommand{\oo}[1]{+ o\!\left(#1\right)}
+
+\title{\textbf{DM \No 9~: Étude de fonction et nombres premiers}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+  \hrulefill
+
+  \vspace{1.2cm}
+  \hrulefill
+
+  \section*{Exercice 1~: Étude d'une fonction}
+  On considère la fonction à étudier suivante. On cherchera finalement à représenter avec le plus d'informations sa courbe représentative. Ses tracés sont en annexe (annexe \ref{courbef}, page \pageref{courbef}).
+  \begin{displaymath}
+    f\colon x\mapsto (x^2 + 2x)\ln\left|\frac{x + 2}{x}\right|,\ f\colon I\to\mathbb{R}
+  \end{displaymath}
+
+  \subsection*{Étude des variations}
+  Déterminons l'ensemble sur lequel $f$ est définie. $x\in\mathbb{R},\ f(x)$ existe pour~:
+  \begin{align*}
+    \frac{x + 2}{x} \neq 0 \text{ et } x \neq 0 \iff x \neq -2 \text{ et } x \neq 0\ \therefore I = \mathbb{R}\setminus\{-2;\, 0\}
+  \end{align*}
+  On remarque de même que $f$ est dotée d'une symétrie centrale (possible car $I$ est symétrique autour de -1). En effet~:
+  \begin{align*}
+    f(-2 - x) &= \left((-2 - x)^2 + 2(-2 - x)\right)\ln\left|\frac{-2 - x + 2}{-2 - x}\right|
+    = (x^2 + 4x + 4 - 4 - 2x)\ln\left|\frac{x}{x + 2}\right| \\
+    &= (x^2 + 2x)\ln\left|\frac{x + 2}{x}\right|(-1) = -f(x) \Longrightarrow f(2(-1) - x) + f(x) = 2 \times 0
+  \end{align*}
+  Ce qui correspond à une relation de symétrie centrale autour du point $(-1,\, 0)$. On pourra donc par la suite se restreindre à une étude sur $[-1;\, +\infty]\setminus\{0\}$. $f$ est de plus continue et dérivable sur $I$ par opération sur les fonctions usuelles. On note $f'$ sa fonction dérivée associée sur $I$ est on a ~:
+  \begin{align*}
+    \forall x\in I,\ f'(x) &= (2x + 2)\ln\left|\frac{x + 2}{x}\right| + (x^2 + 2x)\frac{-\frac{2}{x^2}}{\frac{x + 2}{x}} = 2(x + 1)\ln\left|\frac{x + 2}{x}\right| + x(x + 2)\left(-\frac{2}{x^2}\right)\frac{x}{x + 2} \\
+    f'(x) &= 2(x + 1)\ln\left|\frac{x + 2}{x}\right| - 2 \Rightarrow \forall x\in I,\ x \neq -1,\ f'(x) = 2(x + 1)g(x)
+  \end{align*}
+  Avec $\forall x\in I\setminus\{-1\},\ g(x) = \ln\left|\frac{x + 2}{x}\right| - \frac{1}{x + 1}$. Cette fonction est aussi continue, dérivable par opération sur les fonctions usuelles. On établit alors~:
+  \begin{align*}
+    \forall x\in I\setminus\{-1\},\ g'(x) &= \frac{-\frac{2}{x^2}}{\frac{x + 2}{x}} + \frac{1}{(x + 1)^2}
+    = \frac{1}{(x + 1)^2} - \frac{2}{x(x + 2)} = \frac{x(x + 2) - (x + 1)^2}{x(x + 2)(x + 1)^2}
+    = \frac{x^2 + 2x - x^2 - 2x - 1}{x(x + 2)(x + 1)^2} \\
+    g'(x) &= - \frac{1}{x(x + 2)(x + 1)^2}
+  \end{align*}
+
+  On détermine maintenant les limites de $g$ aux bornes de son intervalle de définition, qui ne présentent pas de forme indéterminée.
+  \begin{align*}
+    \lim_{-1^+} g = -\infty\,;\,\lim_{+\infty} = +\infty\,; \text{ etc., par opération sur les limites.}
+  \end{align*}
+  $g$ étant continue et monotone sur $]-1;\, 0[$, on a d'après le théorème de la bijection~:
+  \begin{displaymath}
+    \forall y\in g(]-1;\, 0[) = \mathbb{R},\, \exists! x\in]-1;\, 0[,\, g(x) = y
+  \end{displaymath}
+  On notera donc $\alpha_2$ la valeur correspondant à cette propriété pour $y = 0$ sur cet intervalle et $\alpha_1$ son équivalent sur l'intervalle $]-2;\, -1[$ qui présente les même propriétés, \textit{mutatis mutandis}\footnote{Désolé, il fallait bien que je le fasse.}. On peut maintenant déterminer le signe de $g$ puis trouver ensuite les variations de $f$ sur $I$. Toute l'étude est représentée dans le tableau, figure \ref{varf}.
+
+  \paragraph{Limites et valeurs spécifiques de $f$.} La limite en 0 de $f$ est obtenue en faisant apparaître une croissance comparée. On exploite la symétrie pour obtenir alors la limite en $-2$ (resp. en $+\infty$ et $-\infty$). On déterminera par ailleurs la valeur de $\alpha_1$ par dichotomie, voir annexe \ref{dichoalpha}, page \pageref{dichoalpha}.
+
+  \begin{align*}
+    \lim_{-2} f = \lim_{0} f = \lim_{x\to 0} \left(\underbrace{(x^2 + 2x)}_{\to 0}\ln(x + 2) - (x + 2)\underbrace{x\ln x}_{\to 0}\right) = 0 \\
+    \ln\left(\frac{x + 2}{x}\right) = \ln\left(1 + \frac{2}{x}\right) \underset{+\infty}{\sim} \frac{2}{x}
+    \Longrightarrow f \underset{+\infty}{\sim} x^2\cdot \frac{2}{x} = 2x \Longrightarrow \lim_{+\infty} f = \lim_{x\to+\infty} 2x = +\infty
+  \end{align*}
+
+  \begin{figure}[ht]
+    \begin{center}
+      \begin{tikzpicture}
+        \tkzTabInit[espcl = 2]{$x$ / 1, $-x$ / 1, $x + 2$ / 1, $g'(x)$ / 1, $g$ / 1.6, $g(x)$ / 1, $2(x + 1)$ / 1, $f'(x)$ / 1, $f$ / 1.7}{$-\infty$, $-2$, $\alpha_1$, $-1$, $\alpha_2$, $0$, $+\infty$}
+        \tkzTabLine{, +, t, , +, , t, , +, , z, -}
+        \tkzTabLine{, -, z, , +, , t, , +, , t, +}
+        \tkzTabLine{, -, d, , +, , d, , +, , d, -}
+        \tkzTabVar{+ /$0$, -D- /$-\infty$ /$-\infty$, R, +D- /$+\infty$ /$-\infty$, R, +D+ /$+\infty$ /$+\infty$, - /$0$}
+        \tkzTabIma{2}{4}{3}{0} % Place le premier zéro dans les variations de g
+        \tkzTabIma{4}{6}{5}{0} % place le deuxième (entre la 4 et 6 valeur, on prend la 5e avec comme image 0)
+        \tkzTabLine{, -, d, -, z, +, d, -, z, +, d, +}
+        \tkzTabLine{, -, t, -, t, -, 0, +, t, +, t, +}
+        \tkzTabLine{, +, d, +, z, , -, , z, +, d, +}
+        \tkzTabVar{- /$-\infty$, +D- /0, + /$f(\alpha_1)$, R, - /$f(\alpha_2)$, +D- /0, + /$+\infty$}
+      \end{tikzpicture}
+      \caption{Tableau de variations de $f$}
+      \label{varf}
+    \end{center}
+  \end{figure}
+
+  \subsection*{Études locale et en l'infini}
+  Déterminons un $DL_3(-1)$ de $f$. Au voisinage de ce point, on peut écrire $f$ ainsi~: $f(x) = (x^2 + 2x)\ln(-1 - \frac{2}{x})$. On posera par la suite $h = x + 1$ pour se ramener à une étude en 0. Travaillons sur la partie logarithmique de $f$~:
+  \begin{align*}
+    l(x) = \ln\left(-1 - \frac{2}{h - 1}\right) = \ln\left(1 - 2 - \frac{2}{h - 1}\right) = \ln\left[1 + 2\left(\frac{1}{1 - h} - 1\right)\right] \text{ avec } 2\left(\frac{1}{1 - h} - 1\right) \underset{h\to 0}{\longrightarrow} 0
+  \end{align*}
+
+  Écrivons un développement limité de cette première expression. On a~:
+  \begin{align*}
+    \frac{1}{1 - h} \underset{0}{=} 1 + h + h^2 + h^3 \oo{h^3} \Longrightarrow
+    2\left(\frac{1}{1 - h} - 1\right) \underset{0}{=} 2h + 2h^2 + 2h^3 \oo{h^3}
+  \end{align*}
+  De plus on sait que $\ln(1 + x) \underset{0}{=} x - \frac{x^2}{2} + \frac{x^3}{3} \oo{x^3}$. On peut à présent composer les deux développements limités car les limites sont compatibles. Alors~:
+  \begin{align*}
+    l(h - 1) &= \ln\left[1 + 2\left(\frac{1}{1 - h} - 1\right)\right] \underset{0}{=} \left[2h + 2h^2 + 2h^3\right] - \frac{1}{2}\left[2h + 2h^2 + 2h^3\right]^2 + \frac{1}{3}\left[2h + 2h^2 + 2h^3\right]^3 \oo{h^3} \\
+    l(h - 1) & \underset{0}{=} 2h + [2 - 2]h^2 + \left[2 - 4 + \frac{8}{3}\right]h^3 \oo{h^3} \underset{0}{=} 2h + \frac{2}{3}h^3 \oo{h^3}
+  \end{align*}
+
+  On cherche maintenant un développement limité en $x = -1$ de la partie polynomiale de $f$, $P(x) = x^2 + 2x$. On peut remarquer\footnote{On aurait pu utiliser la méthode des coefficients indéterminés} que~: $x^2 + 2x = x^2 + 2x + 1 - 1 = \left(x + 1\right)^2 - 1 \Longrightarrow P(h - 1) = h^2 - 1$. On réalise donc maintenant le produit de $P(h - 1)$ et $l(h - 1)$~:
+  \begin{align*}
+    f(x) &= P(x)l(x) = P(h - 1)l(h - 1) \underset{0}{=} (h^2 - 1)\left(2h + \frac{2}{3}h^3\right) \oo{h^3}
+    \underset{0}{=} -2h + \left[2 - \frac{2}{3}\right]h^3 \oo{h^3} \\
+    \therefore f(x) &\underset{-1}{=} -2(x + 1) + \frac{4}{3}(x + 1)^3 \oo{(x + 1)^3}
+  \end{align*}
+  On en conclut que la position relative de la courbe par rapport à la tangente est déterminée par le terme d'ordre~3. Celui-ci étant strictement positif, on en conclut que la courbe représentative de la fonction présente un point d'inflexion en $x = -1$.
+
+  Étudions maintenant le comportement en $+\infty$ de la fonction en en déterminant un $DA_3(+\infty)$. On a, en reprenant le développement limité donné précédemment de la fonction logarithme népérien~:
+  \begin{align*}
+    \ln\left(1 + \frac{2}{x}\right) \underset{+\infty}{=} \frac{2}{x} - \frac{2}{x^2} + \frac{8}{3x^3} \oo{\frac{1}{x^3}}
+    \Longrightarrow f(x) \underset{+\infty}{=} (x^2 + 2x)\left(\frac{2}{x} - \frac{2}{x^2} + \frac{8}{3x^3})\right) \oo{\frac{1}{x}} \\
+    \therefore f(x) \underset{+\infty}{=} [-1 + 2 \times 2] + 2x + \left[\frac{8}{3} - 4\right]\frac{1}{x} \oo{\frac{1}{x}} \underset{+\infty}{=} 2 + 2x \underbrace{- \frac{4}{3x}}_{<0} \oo{\frac{1}{x}}
+  \end{align*}
+  On conclut de cette expression que la droite d'équation $\mathscr{T}\colon y = 2x + 2$ est asymptote oblique à la courbe représentative de $f$, notée $\mathscr{C}$, en $+\infty$, et que celle-ci est en dessous de cette droite, car le terme d'ordre supérieur est négatif pour $x$ tendant vers l'infini. L'étude en $-\infty$ est strictement identique et l'asymptote est par conséquent la même. Par symétrie la courbe est néanmoins au-dessus d'elle.
+
+  \subsection*{Recherche des points d'inflexion}
+  Les points d'inflexion correspondant à des points où s'annulent la dérivée seconde, ils correspondent à des extrema de la dérivée première~: ils n'existent donc pas sur les intervalles de monotonie de $f'$. Pour $x \neq -1$ (on peut l'exclure car on sait déjà qu'il s'agit d'un point d'inflexion), on a $f'(x)=2(x + 1)g(x)$. $x\mapsto 2(x + 1)$ étant croissante et positive sur $I = ]-1;\ +\infty[$, on en déduit que $f'$ dispose des variations de $g$ sur $I$. Les changements de monotonie étant uniquement situés en $x = 0$ sur $I$, il s'agit du seul point à étudier. Néanmoins on peut le considérer comme exclu car $f$ n'est pas défini en ce point. Par symétrie on en conclut qu'il n'y a pas de point d'inflexion sur l'intervalle opposé. Le seul point d'inflexion est donc celui en $x = -1$.
+
+  \section*{Exercice 2~: Nombre premiers d'une progression arithmétique}
+  On considère au cours de l'exercice les ensembles suivants~:
+  \begin{itemize}
+    \item $\mathbb{P}$ l'ensemble des nombres premiers~;
+    \item $A = \{p\in\mathbb{P}\ |\ p \equiv 5 \ [6]\} = \{p_1,\ p_2,\ldots\}$. dans le contexte de l'exercice on supposera cet ensemble fini et on aura $A = \{p_1,\ p_2,\ldots,\ p_n\}$, avec $n$ un entier naturel~;
+    \item $\mathbb{P}_N = \{ d\in\mathbb{P},\ d \mid N\}$.
+  \end{itemize}
+  Le but de l'exercice est de montrer que $A$ est infini, c'est-à-dire qu'il existe une infinité de nombres premiers congrus à 5 modulo 6. On fera donc l'hypothèse par l'absurde que $A$ est fini.
+
+  \paragraph{1.} On remarque que $5 = 6 \cdot 0 + 5\in A \Rightarrow p_1 = 5$. De même $p_2 = 11$. En se référant à l'annexe \ref{nprem}, page \pageref{nprem}, on constate que le premier nombre congru à 5 modulo 6 et non premier est 35. Cela peut justifier la question d'une infinité ou non d'éléments premiers de cette forme.
+  \paragraph{2.} On considère le nombre $N$ défini par ($N$ est bien un entier fini car il est le résultat d'une opération sur un nombre fini d'éléments)~:
+  \begin{displaymath}
+    N = 6\prod_{p\in A}p - 1 = 6\prod_{k = 1}^{n}p_k - 1 = 6P - 1 = 6 \cdot p_1p_2\cdots p_n - 1
+  \end{displaymath}
+  Étant un entier, il possède au moins un diviseur premier qu'on notera $p$. On notera de même $q$ le reste dans la division euclidienne de $p$ par 6, c'est-à-dire que $p \equiv q \ [6]$ et $q\in [\![0,\ 5]\!]$.
+
+  \subparagraph{a.} Étudions la congruence modulo 3 de $N$.
+  \begin{align*}
+    N = 6P - 1 = 3\cdot 2P - 1 \equiv -1 \ [3] \Longrightarrow 3 \,\nmid\, N
+  \end{align*}
+  On suppose donc que 3 divise $p$, or $p$ divise $N$, donc 3 divise $N$ par transitivité de la divisibilité. Ce qui est contradictoire, donc 3 ne divise pas $p$. Nécessairement, on a donc $q \neq 0$ et $q \neq 3$ (puisque dans le cas contraire, $p$ serait divisible par~3). $q\in\{1,\ 2,\ 4,\ 5\}$.
+
+  \subparagraph{b.} On a $p \equiv q \ [6] \iff p - q = 6k = 2\cdot 3k,\, k\in\mathbb{N} \iff p \equiv q \ [2]$. Supposons que $q$ est pair. $p$ l'est donc aussi, or $N$ est un multiple de $p$, donc $N$ est pair. Néanmoins $N \equiv 2\cdot 3P - 1 \equiv -1 \equiv 1 \ [2]$, $N$ est impair. Ce qui est encore absurde, on en conclut que $q$ est impair. $q\in\{1,\ 5\}$.
+
+  \paragraph{3.} Des questions précédentes on a conclu que tout diviseur premier de $N$ est congru soit à 1, soit à 5 modulo 6. Supposons alors que $N$ n'admette pas de diviseur premier congru à 5 modulo 6, c'est-à-dire, $\forall d\in\mathbb{P}_N,\ d \equiv 1 \ [6]$. D'après le théorème fondamentale de l'arithmétique (décomposition d'un nombre en facteurs premiers), on a~:
+  \begin{align*}
+    N = \prod_{d\in\mathbb{P}_N} d^{\nu_d(N)} \text{ or } \forall d\in\mathbb{P}_N,\ d \equiv 1 \ [6] \Longrightarrow \forall n\in\mathbb{N},\ d^n \equiv 1^n \equiv 1 \ [6]
+  \end{align*}
+  En particulier, $d^{\nu_d(N)} \equiv 1 \ [6]$. On en conclut~: $N \equiv \overbrace{1\times 1\times\cdots\times 1}^{\#\mathbb{P}_N \text{ fois}}\equiv 1 \ [6]$. Néanmoins $N = 6P - 1 \equiv -1 \ [6]$. À nouveau, cela est absurde. La supposition est donc fausse~: il existe au moins un diviseur premier de $N$, qu'on notera $p_*$, tel que $p_* \equiv 5 \ [6]$.
+
+  \paragraph{4.} On reconsidère maintenant la définition de $N$, en notant par ailleurs $N = kp_*,\ k\in\mathbb{N}$.
+  \begin{align*}
+    N = 6P - 1 = kp_* \iff 6\cdot P + (-k)\cdot p_* = 1
+  \end{align*}
+  D'après le théorème de Bézout, on en conclut que $P = p_1p_2\cdots p_n$ et $p_*$ sont premiers entre eux, donc $p_* \nmid P$. Cependant, $p_*\in A \Rightarrow P = p_1p_2\cdots p_* \cdots p_n \Rightarrow p_*\mid P$. Par la contraposée, on en conclut que $p_*\not\in A$. Ce qui est absurde, car $p_* \in\mathbb{P}$ et $p_* \equiv 5 \ [6]$. On en conclut que l'hypothèse initiale est fausse, et donc $A$ possède une infinité d'éléments.
+
+
+  %% ANNEXE
+  \newpage
+  \appendix
+
+  \section{Représentations de la courbe de $f$}\label{courbef}
+  \begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.4\textwidth} % 0.4
+      \begin{tikzpicture}[scale=0.96]
+        \draw [thin, color=gray!25] (-4,-6) grid (2,6);
+        \draw (-4,0) -- (2,0);
+        \draw (0,-6) -- (0,6);
+        \draw [domain=-4:2,samples=150] plot (\x, {\x * (\x + 2) * ln(abs((\x + 2)/(\x)))}) node [below right] {$\mathscr{C}$};
+        \draw [dashed] (-4, -6) -- (2, 6) node [above, near end, sloped] {$\mathscr{T}\colon y = 2x + 2$};
+        \draw[->, >=stealth, thick] (0,0)--(1,0);
+        \draw[->, >=stealth, thick] (0,0)--(0,1);
+        \node[below right] at (0,0){O};
+
+        \fill(-1, 0) circle (2pt) node [above left] {\tiny$(-1;0)$};
+        \fill(-0.352, -0.895) circle (2pt) node [below] {\tiny$(\alpha_1;f(\alpha_1))$};
+      \end{tikzpicture}
+      \caption{Représentation de $\mathscr{C}$ et $\mathscr{T}$}
+    \end{subfigure}
+    \begin{subfigure}{0.5\textwidth} % 0.5
+      \begin{tikzpicture}[scale=2.5]
+        \draw [thin, color=gray!25] (-3,-1) grid (1,1);
+        \draw (-3,0) -- (1,0);
+        \draw [domain=-2.185:0.1855,samples=150] plot (\x, {\x * (\x + 2) * ln(abs((\x + 2)/(\x)))}) node [below right] {$\mathscr{C}$};
+        \draw [domain=-1.5:-0.5,samples=2, dashed] plot (\x,{-2*\x - 2});
+        \draw [dashed] (-2,-1) -- (-2,1);
+        \draw [dashed] (0,-1) -- (0,1);
+        \node[below left] at (0,0){O};
+        \fill(-2, 0) [color=gray!90] circle (1pt);
+        \fill(0, 0)  [color=gray!90] circle (1pt);
+        \fill(-1, 0) circle (1pt);
+      \end{tikzpicture}
+      \caption{Représentation des points d'inflexion de $\mathscr{C}$}
+    \end{subfigure}
+  \end{figure}
+
+  \section{Calcul de $\alpha_1$ par dichotomie}\label{dichoalpha}
+  On détermine une valeur approchée à $10^{-1}$ de $\alpha_1$ par dichotomie en cherchant un zéro de la fonction $g$ sur~${]-2;\ -1[}$. On démarre avec $(a_1,\ b_1)=(-1,9;\ -1,1)$. On rappelle que $m_n = \frac{a_n + b_n}{2}$.
+  \begin{center}
+    \begin{tabu}{| r |[0.9pt] r | r | r | r | r |}
+      \hline
+      Étape & $a_n$ & $b_n$ & $m_n$ &$f(m_n)$ & $b_n-a_n$ \\ \tabucline[0.9pt]{-}
+      1 & $-1,90$ & $-1,10$ & $-1,50$ & $0,90$ & $0,80$ \\
+      2 & $-1,90$ & $-1,50$ & $-1,70$ & $-0,31$ & $0,40$ \\
+      3 & $-1,70$ & $-1,50$ & $-1,60$ & $0,28$ & $0,20$ \\
+      4 & $-1,70$ & $-1,60$ & $-1,65$ & $-0,01$ & $0,10$ \\
+      5 & $-1,65$ & $-1,60$ & $-1,63$ & $0,13$ & $0,05$ \\
+      \hline
+    \end{tabu}
+  \end{center}
+  On a donc pour une précision à $10^{-1}$, $\alpha_1 \approx -1,6$.
+
+  \section{Premiers nombres premiers}\label{nprem}
+  \begin{align*}
+    \mathbb{P} =
+  \{&2,\ 3,\ 5,\ 7,\ 11,\ 13,\ 17,\ 19,\ 23,\ 29,\ 31,\ 37,\ 41,\ 43,\ 47,\ 53,\ 59,\ 61,\ 67,\ 71, \\
+    &73,\ 79,\ 83,\ 89,\ 97,\ 101,\ 103,\ 107,\ 109,\ 113,\ 127,\ 131,\ 137,\ 139,\ 149,\ 151,\ 157,\\
+    &163,\ 167,\ 173,\ 179,\ 181,\ 191,\ 193,\ 197,\ 199,\ 211,\ 223,\ 227,\ 229,\ 233,\ 239,\ 241,\ldots\}
+  \end{align*}
+\end{document}

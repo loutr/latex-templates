@@ -1,0 +1,334 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[table]{xcolor}
+\DecimalMathComma
+\usepackage[top=1.9cm, bottom=1.9cm, left=3cm, right=3cm]{geometry}
+\usepackage{amssymb, amsmath}
+\usepackage{tikz}
+\usepackage{listings}
+
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{darkgray}{rgb}{0.2,0.2,0.2}
+\definecolor{dark}{rgb}{0,0,0}
+\lstMakeShortInline[columns=fixed]£
+
+\lstset{frame=tb,
+  language=Caml,
+  basicstyle={\small\ttfamily\color{darkgray}},
+  numbers=left,
+  keywordstyle=\color{dark},
+  commentstyle=\color{gray},
+  breakatwhitespace=true,
+  otherkeywords={fst, snd, =, !}
+}
+
+\renewcommand{\O}[1]{O\!\left(#1\right)}
+\newcommand{\ent}[1]{\left\lfloor #1\right\rfloor}
+
+\title{Paire de points la plus proche ou \textit{Closest Pair} \\
+\large Utilisation du paradigme «~diviser pour régner~» en \textsc{OCaml}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+
+  \section{Introduction}
+  \paragraph{} On considère un ensemble de points (qu'on nommera \textit{nuage}) du plan $\mathbb{R}^2$ muni d'un repère orthonormé $(O;\ \vec\imath,\ \vec\jmath)$ de $n$ points deux à deux distincts, $n \geqslant 2$. Les points sont indexés (arbitrairement) et on peut écrire le nuage sous la forme $\mathcal{N} = \{M_1,\ M_2,\dots,\ M_n\}$. On recherche la distance minimale entre deux points de ce nuage. On représentera dans la suite de l'exercice un nuage en mémoire avec le type~: £(float * float) array£. On utilisera les primitives £fst£ et £snd£ pour récupérer respectivement l'abscisse et l'ordonnée des points, ou bien la compréhension £x, y = m£, où £m£ est la variable informatique représentant un point du nuage.
+
+  \paragraph{} Par la suite, on utilisera la fonction £distance m1 m2£ définie ci-dessous, renvoyant le carré de la distance entre deux points £m1£ et £m2£ du nuage.
+  \begin{lstlisting}
+let distance m1 m2 =
+  let dx = (fst m2) -. (fst m1) and dy = (snd m2) -. (snd m1) in
+    dx *. dx +. dy *. dy
+  \end{lstlisting}
+
+  \paragraph{} On envisagera dans un premier temps un algorithme naïf pour en évaluer la complexité avant de considérer un algorithme basé sur le paradigme de «~diviser pour régner~».
+
+  \begin{figure}[h]
+    \begin{lstlisting}
+val l : (float * float) array =
+  [|(1., 2.1); (4.5, -1.6); (5.4, 1.2); (1.1, 2.3)|]
+# fst l.(1);;
+- : float = 4.5
+    \end{lstlisting}
+    \caption{Exemple de manipulation d'un nuage}
+  \end{figure}
+
+  \section{Algorithme naïf}
+
+  \subsection{Cas général}
+
+  On ne cherchera pas à démontrer la terminaison ni la correction des fonctions suivantes. Construisons dans un premier temps une fonction £distance_i nuage i n£ qui, pour un nuage £nuage£ donné, détermine la distance du £i£-ème point de l'ensemble à ceux d'indice supérieur. On construit préalablement une fonction £min_ref r n£ qui, à une référence £r£ attribue £n£ si £n < !r£ et ne fait rien sinon, ce qui permet de réduire la taille de la fonction et de gagner en lisibilité, tout comme la fonction £dist j£.
+
+  \begin{lstlisting}
+let min_ref r n =
+  if n < !r then r := n
+
+let distance_i nuage i n =
+  let dist j = distance nuage.(i) nuage.(j) in
+  let mini = ref (dist (i + 1)) in
+  for k = i + 2 to n - 1 do
+    min_ref mini (dist k)
+  done;
+  !mini
+  \end{lstlisting}
+
+  \paragraph{} On peut dès lors construire la fonction £distance_mini nuage£ qui renvoie le carré\footnote{On renvoie le carré et non la valeur (qu'on peut obtenir en utiliser £sqrt£), afin de réutiliser la fonction ensuite} de la distance minimale entre deux points du nuage £nuage£, en évaluant toutes les distances mesurables entre des points du nuages. On réalise ainsi la mesure de la distance du premier point au $n - 1$ suivants, puis du deuxième aux $n - 2$ restants, etc.
+
+  \begin{lstlisting}
+let distance_mini nuage =
+  let n = Array.length nuage in
+  let mini = ref (distance_i nuage 0 n) in
+  for i = 1 to n - 2 do
+    min_ref mini (distance_i nuage i n)
+  done;
+  !mini
+  \end{lstlisting}
+
+  \paragraph{} Établissons maintenant l'expression de la complexité de £distance_mini nuage£. On considérera $n$ la taille du nuage £nuage£ comme taille de donnée et l'appel à £distance m1 m2£ comme opération élémentaire~; on notera $C(n)$ la complexité évaluée. La fonction £distance_i nuage i n£ réalise un appel à £distance m1 m2£ puis une répétitive indexée de $i + 2$ à $n - 2$ avec un appel à chaque tour. Enfin la fonction distance mini réalise un appel à £distance_i nuage i n£ pour $i = 0$ et ensuite une répétitive indexée de $1$ à $n - 1$ réalisant un appel à £distance_i nuage i n£. Finalement~:
+  \begin{align*}
+    C(n) &= \left(1 + \sum_{k=2}^{n-1} 1\right) + \sum_{i=1}^{n-2} \left(1 + \sum_{k=i+2}^{n-1}1\right) = \sum_{i=0}^{n-2} \left(1 + \sum_{k=i+2}^{n-1}1\right) = \sum_{i=0}^{n-2} \sum_{k=i+1}^{n-1}1 = \sum_{i=0}^{n-2} (n - 1 - (i + 1) + 1) \\
+    &= \sum_{i=0}^{n-2} (n - 1 - i) = (n-1)(n-1) - \sum_{i=0}^{n-2} i = (n-1)^2 - \frac{(n-2)(n-1)}{2} = \frac{n(n-1)}{2} \\
+  \end{align*}
+  \[
+    \therefore C(n) \underset{+\infty}{=} \O{n^2}
+  \]
+
+  \subsection{Cas d'un nuage en dimension 1}
+
+  On suppose les points alignés et le tableau £nuage£ trié par abscisses croissantes. Puisqu'ils sont alignés, on a pour un point $M_i$ du nuage~:
+  \begin{displaymath}
+    \forall j\in [\![i+2,\ n]\!],\ M_iM_j = M_iM_{i+1} + M_{i+1}M_j > M_iM_{i+1}
+  \end{displaymath}
+  Ainsi une distance entre deux points non adjacents dans le tableau ne peut être le minimum et il n'y a, alors, qu'à vérifier les distances entre les points adjacents.
+
+  \begin{lstlisting}
+let distance_mini_1D nuage =
+  let n = Array.length n in
+  let dist i = distance nuage.(i) nuage.(i + 1) in
+  let mini = ref (dist 0) in
+  for i = 1 to n - 2 do
+    min_ref mini (dist i)
+  done;
+  sqrt !mini
+  \end{lstlisting}
+
+  Un seul appel à £distance m1 m2£ est réalisé directement dans une répétitive indexée qui effectue environ $n$ tours de boucle. Puisque aucun appel n'est réalisé ailleurs, on a bien $C(n) = \O{n}$.
+
+  \section{Diviser pour régner}
+
+  \subsection{Principe et application}
+
+  \paragraph{} On suppose maintenant qu'on possède deux listes £nuage_h£ et £nuage_v£ contenant les points du nuage £nuage£, triées selon l'ordre lexicographique sur $\mathbb{R}^2$, l'une en considérant d'abord les abscisses et l'autre les ordonnées. On applique le principe de «~diviser pour régner~» en recherchant les minima dans des tableaux de tailles strictement inférieures --- on découpe le nuage en sous-nuages. Écrivons d'abord la fonction £partition nuage£ qui renvoie deux tableaux de tailles strictement inférieures, pour un nuage £nuage£ ordonné (on choisira £nuage_h£). On découpera en deux nuages de tailles $\ent{\frac{n}{2}}$ et $n - \ent{\frac{n}{2}}$, soit
+  \begin{displaymath}
+    n - \ent{\frac{n}{2}} =
+    \left\{\begin{array}{rl}
+      n/2 &\text{n pair} \\
+      (n + 1)/2 &\text{n impair}
+    \end{array}\right. \text{ et }
+    \ent{\frac{n}{2}} =
+    \left\{\begin{array}{rl}
+      n/2 &\text{n pair} \\
+      (n - 1)/2 &\text{n impair}
+    \end{array}\right.
+  \end{displaymath}
+
+  \begin{lstlisting}
+let partition nuage =
+  let n = Array.length nuage in
+  let nuage_g = Array.make (n / 2) (0.0, 0.0)
+  and nuage_d = Array.make (n - (n / 2)) (0.0, 0.0) in
+  for k = 0 to n - 1 do
+    if k < n / 2 then nuage_g.(k) <- nuage.(k)
+    else nuage_d.(k - (n / 2)) <- nuage.(k)
+  done;
+  nuage_g, nuage_d
+  \end{lstlisting}
+
+  \paragraph{} Par ailleurs, il est nécessaire de partitionner le nuage verticale aussi selon le positionnement par rapport à $x_{med}$, qui correspond à l'abscisse du point $M_{\ent{\frac{n}{2}}}$. On construit dans ce but la fonction £tri_vertical nuage_v seuil£ suivante.
+
+  \begin{lstlisting}
+let tri_vertical nuage_v seuil =
+  let n = Array.length nuage_v in
+  let g = ref [||] and d = ref [||] in
+  for k = 0 to n - 1 do
+    let m = nuage_v.(k) in
+    let choix = if (fst m) < seuil then g else d in
+    choix := Array.append !choix [|m|]
+  done;
+  !g, !d
+  \end{lstlisting}
+
+  \paragraph{} Dans le cas où les nuages sont suffisamment petits ($n < 4$), on applique de nouveau l'algorithme naïf. Sinon, on procède récursivement et on partitionne encore. Une fois qu'on a déterminé les minima des nuages à gauche ($d_g$) et à droite ($d_d$), on pose $\delta = \min(d_g,\ d_d)$ et on isole les points de l'ensemble $B$ tel que $B = \{(x, y)\in\mathcal{N},\ |x-x_{med}|<\delta\}$, où $x_{med}$ désigne l'abscisse du point $M_{\ent{\frac{n}{2}}}$ à la limite des deux nuages.
+
+
+  \begin{figure}
+    \begin{center}
+      \begin{tikzpicture}
+        \draw [thin, color=gray!25] (-5,-3) grid (5,3);
+        \draw (-1.8, -2.0) -- (-0.9, -1.2) node [above, midway, sloped] {$d_g$};
+        \draw (3.5, 2.2) -- (2.9, 1.9) node [above, midway, sloped] {$d_d$};
+        \draw (-0.4, 3) -- (-0.4,-3) node [below] {$x_{med}$};
+
+        \fill (-1.8, -0.4) circle (2pt);
+        \fill (-0.6, -2.6) circle (2pt);
+        \fill (0.8, 2.7) circle (2pt);
+        \fill (-1.8, -2.0) circle (2pt);
+        \fill (0.6, 1.0) circle (2pt);
+        \fill[color=red](-0.9, -1.2) circle (2pt);
+        \fill (-3.4, -0.2) circle (2pt);
+        \fill[color=red] (-0.4, -1.4) circle (2pt);
+        \fill (3.5, 2.2) circle (2pt);
+        \fill (-0.1, 0.8) circle (2pt);
+        \fill (-3.1, 2.9) circle (2pt);
+        \fill (2.9, 1.9) circle (2pt);
+        \draw [style=dotted] (-1.1, 3) -- (-1.1,-3);
+        \draw [style=dotted] (0.3, 3) -- (0.3,-3);
+
+        \draw [<->] (-1.1, 1.5) -- (-0.4, 1.5) node [above, midway] {$\delta$};
+        \draw [<->] (-0.4, 1.5) -- (0.3, 1.5) node [above, midway] {$\delta$};
+      \end{tikzpicture}
+      \caption{Exemple de découpage}\label{decoupage}
+    \end{center}
+  \end{figure}
+
+  Deux points dans le même demi-plan (d'équation $x < x_{med}$ ou $x \geqslant x_{med}$) ne peuvent être à une distance strictement plus petite que $\delta$, par définition de $\delta$. Par ailleurs, pour $M_1(x_1,\ y_1),\ M_2(x_2,\ y_2)\in\mathcal{N}$ on a~:
+  \begin{displaymath}
+    M_1M_2^2 = \underbrace{(x_2 - x_1)^2}_{\geqslant 0} + \underbrace{(y_2 - y_1)^2}_{\geqslant 0} \Longrightarrow
+    \left\{\begin{array}{l}
+    M_1M_2 \geqslant \sqrt{(x_2 - x_1)^2} = |x_2 - x_1| \\
+    M_1M_2 \geqslant \sqrt{(y_2 - y_1)^2} = |y_2 - y_1|
+    \end{array}\right.
+  \end{displaymath}
+  On considère de plus $x_1 < x_{med},\ M_1\not\in B \Longrightarrow x_1 < x_{med} - \delta$ et $x_2 \geqslant x_{med}$, d'où $x_2 \geqslant x_{med} > x_1 + \delta \Longrightarrow x_2 - x_1 > \delta \Longrightarrow M_1M_2 \geqslant |x_2 - x_1| > \delta$. L'autre cas ($x_2 > x_{med} + \delta$) est symétrique.
+  Ainsi deux points qui ne sont pas dans $B$ ne peuvent former un minimum. À l'inverse, des points de $B$ ont pu ne pas être comparés car ils n'étaient pas dans le même nuage et sont pourtant plus proches (cas des deux points rouges, \ref{decoupage}). On déterminera ainsi le minimum sur l'ensemble de ces points.
+
+  \paragraph{} On établit la fonction £restriction_bande nuage_v xmed delta£ qui, à un nuage trié selon les ordonnées £nuage_v£, associe la bande $B$ définie précédemment.
+
+  \begin{lstlisting}
+let restriction_bande nuage_v xmed delta =
+  let bande = ref [||] in
+  for k = 0 to (Array.length nuage_v) - 1 do
+    let m = nuage_v.(k) in
+    if abs_float ((fst m) -. xmed) < delta then
+      bande := Array.append !bande [|m|]
+  done;
+  !bande
+  \end{lstlisting}
+
+  \paragraph{} On cherche à réduire la longueur de la bande étudiée. On considère alors $M_1(x_1,\ y_1),\ M_2(x_2,\ y_2)\in B$ avec $y_2 > y_1 + \delta \Longrightarrow y_2 - y_1 > \delta$. Alors $M_1M_2 \geqslant |y_2 - y_1| > \delta$. Ce couple de points ne peut donc pas correspondre au minimum.
+
+  \paragraph{} Soit un carré de longueur $\delta/2$ situé dans un demi-plan ($x < x_{med}$ ou $x \geqslant x_{med}$). Toute mesure à l'intérieur de ce carré ne peut excéder la longueur de la diagonale, soit $\sqrt{2}\cdot\frac{\delta}{2}$. On suppose ainsi qu'il existe au moins deux points $M_1$ et $M_2$ du nuage $\mathcal{N}$ dans ce carré. Automatiquement, $M_1M_2 < \sqrt{2}\frac{\delta}{2} = \frac{\delta}{\sqrt{2}} < \delta$. Ceci est absurde par minimalité de la distance $\delta$ sur les demi-plans. Il existe donc au plus un point du nuage dans un tel carré.
+
+
+  \paragraph{} La bande réduite étant un rectangle de dimension $(\delta + \delta) \times (\delta)$, il est possible d'y construire 8 carrés de côté $\delta/2$ comme sur la figure \ref{carres}.
+
+  Ces carrés étant situés dans des demi-plans distincts, ils possèdent au plus 1 point~: soit 8 points au total dans cette zone, c'est-à-dire 7 points distincts du point étudié. On n'a donc qu'à déterminer au plus les distances du point au 7 points qui possèdent une ordonnée directement supérieure à la sienne. On considère alors une fonction minimum qui correspond à l'algorithme naïf appliqué initialement mais limité à 7 itérations, notée £minimum_global bande delta£.
+
+  \begin{lstlisting}
+let minimum_global bande delta =
+  let n = Array.length bande in
+  let dist k j = distance bande.(k) bande.(j) in
+  let mini = ref (dist 0 1) in
+  for k = 0 to (n - 2) do
+    for j = k + 1 to min (k + 7) (n - 1) do
+      min_ref mini (dist k j);
+    done;
+  done;
+  min delta !mini
+  \end{lstlisting}
+
+  \begin{figure}[h]
+    \begin{center}
+      \begin{tikzpicture}[scale=3]
+        \draw [thin, color=gray!25] (-2,-2) grid (1,0);
+        \draw (-1.8, -2.0) -- (-0.9, -1.2) node [above, midway, sloped] {$d_g$};
+        \draw (-0.4, 0) -- (-0.4,-2) node [below] {$x_{med}$};
+        \draw [dashed] (-0.75, -1.4) -- (-0.75, -0.7);
+        \draw [dashed] (-0.05, -1.4) -- (-0.05, -0.7);
+        \draw [dashed] (-1.1, -1.4) -- (0.3, -1.4);
+        \draw [dashed] (-1.1, -1.05) -- (0.3, -1.05);
+        \draw [dashed] (-1.1, -0.7) -- (0.3, -0.7);
+
+        \fill (-1.8, -0.4) circle (1pt);
+        \fill (-1.8, -2.0) circle (1pt);
+        \fill[color=red](-0.9, -1.2) circle (1pt);
+        \fill[color=red] (-0.4, -1.4) circle (1pt);
+        \draw [style=dotted] (-1.1, 0) -- (-1.1,-2);
+        \draw [style=dotted] (0.3, 0) -- (0.3,-2);
+
+        \draw [<->] (-1.1, -0.3) -- (-0.4, -0.3) node [above, midway] {$\delta$};
+        \draw [<->] (-0.4, -0.3) -- (0.3, -0.3) node [above, midway] {$\delta$};
+      \end{tikzpicture}
+    \end{center}
+    \caption{Construction des carrés de longueur $\delta/2$ (reprise de l'exemple précédent)}\label{carres}
+  \end{figure}
+
+  \paragraph{} On établit finalement la fonction £distance_mini_dpr nuage_h nuage_v£ qui associe au même nuage, trié selon les abscisses et les ordonnées, le carré\footnote{Encore une fois, cela facilite les appels récursifs car les calculs sont effectués à partir de cette quantité, et non de la véritable distance.} de la distance minimale entre deux points.
+
+  \begin{lstlisting}
+let rec distance_mini_dpr nuage_h nuage_v =
+  let n = Array.length nuage_h in
+  if n < 4 then
+    distance_mini nuage_h
+  else
+    let nuage_g, nuage_d = partition nuage_h in
+    let xmed = fst nuage_d.(0) in
+    let nuage_vg, nuage_vd = tri_vertical nuage_v xmed in
+    let dg = distance_mini_dpr nuage_g nuage_vg
+    and dd = distance_mini_dpr nuage_d nuage_vd in
+    let delta = min dg dd in
+    let bande = restriction_bande nuage_v xmed (sqrt delta) in
+    if Array.length bande = 1 then
+      delta (* delta est nécessairement le minimum *)
+    else
+      minimum_global bande delta
+  \end{lstlisting}
+
+  \subsection{Calcul de la complexité --- Pire des cas}
+
+  On considère un nuage de taille $n$, qui sera fixé comme taille de donnée. L'opération élémentaire est ici le nombre d'appels à la fonction £distance£. On suppose d'abord que $n = 2^k,\ k\in\mathbb{N}$. Ainsi à chaque appel sur un nuage de taille $k$, les deux sous-nuages créés par £partition£ sont de tailles $\frac{k}{2}\in\mathbb{N}$ chacun.
+
+  \paragraph{} On constate qu'aucun appel à £distance£ n'est effectué par les fonctions £restriction_bande£, £partition£ et £tri_vertical£. Reste ainsi la fonction £minimum_global£. On suppose dans le pire des cas que la bande £bande£ correspond au nuage entier £nuage_v£, de taille $n$. La fonction présente deux répétitives indexées, la première effectuant $n - 2 + 1$ tours de boucles et la deuxième au pire 7, ceci provenant d'un résultat démontré précédemment. Cette seconde boucle effectuant un seul appel à £distance£ par itération, on détermine la complexité temporelle notée $C_1(n)$ de £minimum_global£ par~:
+
+  \[
+    C_1(n) = 1 + \sum_{k=0}^{n-2} \sum_{j=k+1}^{k+7} 1 = 1 + \sum_{k=1}^{n-1} 7 = 1 + 7(n-1) = 7n - 6
+  \]
+
+  \paragraph{} Enfin, deux appels à £distance_mini_dpr£ sont réalisés dans la fonction-même, sur des données de tailles $\frac{n}{2}$. On obtient alors~:
+
+  \[
+    C(n) = 2C\left(\ent{\frac{n}{2}}\right) + 7n - 6 \Longrightarrow C(n) -6 = 2C\left(\ent{\frac{n}{2}}\right) - 12 + 7n = 2\left[C\left(\ent{\frac{n}{2}}\right) - 6\right] + 7n
+  \]
+
+  En considérant la suite $\left(C(n) - 6\right)_{n\in\mathbb{N}}$, on reconnaît une suite dichotomique de paramètres $p = 2$, $\lambda = 7$, $\gamma = 1$. Or, $\log_2 p = 1 = \gamma$. On en conclut~:
+
+  \[
+    C(n) - 6 \underset{+\infty}{=} \O{n^1\log_2 n} \Longrightarrow C(n) \underset{+\infty}{=} \O{n\ln n}
+  \]
+
+  \subsection*{Nombres d'appels à £distance£ dans plusieurs cas et évaluation du temps}
+   \paragraph{} Le cas de l'algorithme diviser pour régner correspond à une valeur moyenne
+
+\begin{figure}[h]
+  \begin{tabular}{rrrrrrrrr}
+    \hline
+                  $n =$ & 10 &   100 &     500 &   1 000 & 2 000 & 10 000 & 50 000\\ \hline \\
+    \multicolumn{8}{l}{Algorithme naïf} &\\
+    \hline \hline
+             Opérations & 45 & 4 950 & 124 750 & 499 500 & 1 999 000 & 49 995 000 & 1 249 975 000 \\
+      Temps d'éxécution & 24~\mu s & 269~\mu s & 10~ms & 26~ms & 103~ms & 2, 85~s & 85~s \\
+    \hline \\
+    \multicolumn{8}{l}{Diviser pour régner} &\\
+    \hline \hline
+             Opérations & 20 & 550 &   4 872 &  11 500 & 26 500 &  176 767 & 1 137 049 \\
+      Temps d'éxécution & 56~\mu s & 120~\mu s & 900~\mu s & 4~ms & 12~ms & 258~ms & 7, 4~s \\
+    \hline
+  \end{tabular}
+
+
+\end{figure}
+\end{document}

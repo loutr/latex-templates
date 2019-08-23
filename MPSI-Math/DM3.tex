@@ -1,0 +1,176 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{tikz,tkz-tab}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+
+\title{\textbf{DM \No 3~: Application complexe et équation différentielle}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+  \hrulefill
+
+  \vspace{2cm}
+
+  \hrulefill
+
+  \section{Un peu comme au DS}
+  On considère l'application $f$ suivante~:
+    \begin{displaymath}
+      f\colon\left\{
+      \begin{aligned}
+          \mathbb{C}^*\!\!&\longrightarrow \mathbb{C}\\
+          z&\longmapsto z+\frac{1}{z}
+      \end{aligned}
+      \right.
+    \end{displaymath}
+    \paragraph{1.}
+    Déterminons le nombre antécédents d'un complexe $y$ par $f$ en fonction de sa valeur. On a, avec la définition~:
+    \begin{displaymath}
+      y = z+\frac{1}{z} \iff zy = z^2 + 1 \iff z^2 - yz + 1 = 0
+    \end{displaymath}
+    Cela correspond donc à un polynôme à coefficients comlexes, pour lequel on applique la méthode de résolution usuelle~: $\Delta = (-y)^2 - 4 \times 1 \times 1 = y^2 - 4$. Pour un tel polynôme, il existe toujours deux racines complexes pour $\Delta \neq 0$ et une seule pour $\Delta = 0$. On a donc~:
+    \begin{displaymath}
+      \Delta = 0 \iff y^2 - 4 = 0 \iff (y-2)(y+2) = 0 \iff y\in\{-2;2\}
+    \end{displaymath}
+    Puisqu'on a procédé précédemment par équivalence, on en conclut que pour $y\in\{-2;2\}$, $y$ admet 1 seul antécédent par $f$, sinon, il en admet 2.
+
+    \paragraph{2.}
+    On note $\delta$ une racine complexe de $\Delta$, $\delta$ existe toujours, et les racines du polynôme précédent sont donc de la forme $\frac{y\pm\delta}{2}$. on a donc~: $\forall y\in\mathbb{C},\ \exists z=\frac{y+\delta}{2}\in\mathbb{C},\ y = z+\frac{1}{z}$. $y$ admet toujours au moins un antécédent, et $f$ est surjective.
+
+    On considère maintenant les images de $i$ et $-i$ par $f$. On a $f(i)=i+\frac{1}{i}=i-i=0$ et $f(-i)=-i+\frac{1}{-i}=-i+i=0$. On a donc bien $-i\neq i,\ f(-i)=f(i)$. 0 admet donc 2 antécédents par $f$, $f$ n'est donc pas injective.
+
+    \paragraph{3.}
+    On note~: $\mathscr{U}=\left\{z\in\mathbb{C},\ \abs{z}=1\right\}$. On cherche un sur-ensemble de $f(\mathscr{U})$. On a~:
+    \begin{displaymath}
+      \forall z\in\mathscr{U},\ z = e^{i\theta},\ \theta\in\mathbb{R},\ f(z)=e^{i\theta}+\frac{1}{e^{i\theta}}=e^{i\theta}+e^{-i\theta}=2\cos(\theta)
+    \end{displaymath}
+    On peut donc encadrer $f(z)$, de telle sorte que~:
+    \begin{displaymath}
+      -1 \leqslant \cos(\theta) \leqslant 1 \iff -2 \leqslant 2\cos(\theta) \leqslant 2 \iff -2 \leqslant f(z) \leqslant 2 \iff f(\mathscr{U})\subset F=[-2;2]
+    \end{displaymath}
+
+    On considère maintenant $y=f(z)\in F \Rightarrow y^2\in[0;4]$. On rappelle~: $y=f(z) \iff z^2 - yz +1 = 0$ (dans notre cas à coefficients réels). Le discrimant est donné par $\Delta = y^2-4$, or $0 \leqslant y^2 \leqslant 4 \iff -4 \leqslant \Delta \leqslant 0$. On disjoncte donc les cas~:
+    \begin{itemize}
+      \item $\Delta = 0$ (nécessairement $y\in\{-2;2\}$)~: la racine unique est $z=\frac{y}{2}\Rightarrow z\in\{-1;1\}\Rightarrow z\in\mathscr{U}$
+      \item $\Delta < 0$~: les racines sont $z_1=\frac{y+i\sqrt{-\Delta}}{2}=\frac{y+i\sqrt{4-y^2}}{2}$ et $z_2 = \overline{z_1} \Rightarrow \abs{z_2}=\abs{z_1}$. On calcule~:
+      \begin{displaymath}
+        \abs{z_1}^2=\left(\frac{y}{2}\right)^2+\left(\frac{\sqrt{4-y^2}}{2}\right)^2=\frac{y^2+4-y^2}{4}=1 \Rightarrow \abs{z_1}=\abs{z_2}=1 \Rightarrow \{z_1, z_2\}\subset\mathscr{U}
+      \end{displaymath}
+    \end{itemize}
+    On en conclut~: $y = f(z)\in F \Rightarrow z\in\mathscr{U}$.
+
+    \paragraph{4.}
+    On note maintenant $\mathscr{D}=\left\{z\in\mathbb{C},\ 0<\abs{z}<1\right\}$~; ainsi que l'application induite $g=f\left\vert_{\mathscr{D}}^{\mathbb{C}\setminus F}\right.$. Montrons que $g$ est bijective. Soit $z$ une solution de $f(z)=y \Rightarrow z+\frac{1}{z}=y$. On a donc~:
+    \begin{displaymath}
+      f\left(\frac{1}{z}\right)=\frac{1}{z}+\frac{1}{\frac{1}{z}} = \frac{1}{z}+z = f(z) = y
+    \end{displaymath}
+
+    Donc $\frac{1}{z}$ est aussi un antécédent de $y$ par $f$. De plus, $f(\mathscr{U})\subset F$, c'est-à-dire, $\abs{z}=1 \Rightarrow y=f(z)\in F$, soit par contraposée $y\not\in F \Rightarrow \abs{z}\neq 1$. Dans ce cas-là on a de plus $\frac{1}{z}\neq z$, or $y$ admet deux antécédents par $f$ sur $\mathbb{C}\setminus F$ (car $y\not\in\{-2;2\}$, voir question 1), ceux-ci sont donc $z$ et $\frac{1}{z}$. On disjoncte les cas~:
+    \begin{itemize}
+      \item $0<\abs{z}<1\Rightarrow \frac{1}{\abs{z}}>1 \Rightarrow \abs{\frac{1}{z}}>1\ \therefore z\in\mathscr{D} \wedge \frac{1}{z}\not\in\mathscr{D}\Rightarrow\exists! z'=z\in\mathscr{D},\ f(z')=y$
+      \item $\abs{z}>1\Rightarrow \frac{1}{\abs{z}}<1 \Rightarrow 0<\abs{\frac{1}{z}}<1\ \therefore z\not\in\mathscr{D} \wedge \frac{1}{z}\in\mathscr{D}\Rightarrow\exists! z'=\frac{1}{z}\in\mathscr{D},\ f(z')=y$
+    \end{itemize}
+    On peut conclure, en remarquant que $z'\in\mathscr{D}$ et $y\in\mathbb{C}\setminus F$ (ensembles de départ et d'arrivée de $g$)~:
+    \begin{displaymath}
+      \forall y\in\mathbb{C}\setminus F,\ \exists! z\in\mathscr{D},\ g(z)=y
+    \end{displaymath}
+    C'est-à-dire, $g$ est bijective.
+
+    \section{Recollement de solution pour une équation différentielle linéaire d'ordre 2}
+
+    \subsection{Calcul liminaire}
+    On admet la limite suivante~: $\lim_{x\to 0} \frac{e^x-1-x}{x^2}=\frac{1}{2}$. De cette limite on a, en posant $x'=-x$~:
+    \begin{displaymath}
+      \lim_{x'\to -0} \frac{e^{-x'}-1+x'}{{x'}^2}=\frac{1}{2} \text{, par limite de fonction composée.}
+    \end{displaymath}
+    On cherche donc maintenant~:
+    \begin{equation}\label{EQ1}
+      \lim_{x\to 0} \frac{e^x-e^{-x}-2x}{x^2} =\lim_{x\to 0}\left(\frac{e^x-1-x}{x^2}-\frac{e^{-x}-1+x}{x^2}\right)=\frac{1}{2}-\frac{1}{2}=0 \text{, par limite de somme.}
+    \end{equation}
+
+    \subsection{Exercice}
+
+    On considère maintenant l'équation différentielle suivante, avec $y\colon I\to\mathbb{R},\ x\mapsto y(x),\ I\subset\mathbb{R}^*$.
+    \begin{displaymath}
+      (\mathscr{E}):\ xy''+2y'-xy=4xe^x
+    \end{displaymath}
+    \paragraph{1.} On pose $\forall x\in I,\ z(x)=x\cdot y(x)$. On a donc, puisque $y$ est deux fois dérivable~:
+    \begin{itemize}
+      \item $z'(x)= y(x)+x\cdot y'(x)\Rightarrow z'=xy'+y$
+      \item $z''(x)=y'(x)+y'(x)+x\cdot y''(x)\Rightarrow z''=xy''+2y'$
+    \end{itemize}
+    On injecte dans $(\mathscr{E})$ et on a~: $ (xy''+2y')-(xy)=4xe^x \iff z''-z=4xe^x$, équation qu'on notera $(\mathscr{F})$ par la suite.
+
+    \paragraph{2.} On recherche une solution particulière de $(\mathscr{F})$ de la forme $f_P\colon x\mapsto (ax^2+bx)e^x,\ a,b\in\mathbb{R}$. $f_P$ est dérivable deux fois sur $\mathbb{R}$ et~:
+    \begin{itemize}
+      \item $f'_P(x) = (2ax+b+ax^2+bx)e^x$
+      \item $f''_P(x) = (2a + 2ax + b + 2ax + b + ax^2 + bx)e^x = (ax^2+(4a+b)x + 2a + 2b)e^x$
+    \end{itemize}
+    $f_P$ est solution de  $(\mathscr{F})$ si, et seulement si~:
+    \begin{align*}
+      f''_P-f_P=4xe^x &\iff ax^2+(4a+b)x + 2a + 2b -(ax^2+bx) = 4x \iff 4ax + 2a + 2b = 4x \\
+      &\iff\left\{
+        \begin{array}{ll}
+          4a  &=4 \\
+          2a + 2b &=0
+        \end{array}
+      \right.
+      \iff\left\{
+        \begin{array}{ll}
+          a  &=1 \\
+          b &=-a = -1
+        \end{array}
+      \right.
+    \end{align*}
+
+    On en conclut que $f_P\colon x\mapsto \left(x^2-x\right)e^x$ est une solution particulière de $(\mathscr{F})$.
+
+    \paragraph{3.} On considère maintenant l'équation caractéristique associé à $(\mathscr{F})$, $r^2-1=0 \iff (r-1)(r+1)=0 \iff r\in\{-1;1\}$. Les solutions de l'équation homogène associée à $(\mathscr{F})$ sont donc de la forme~: $x\mapsto ae^x+be^{-x},\ a,b\in\mathbb{R}$. Les solutions de $(\mathscr{F})$ sont donc, d'après le principe de superposition, de la forme~: $f(x)=\left(x^2-x\right)e^x+ae^x+be^{-x},\ a,b\in\mathbb{R}$. Or $f$ solution de $(\mathscr{F})$ est équivalent à $y\colon x\mapsto\frac{f(x)}{x}$ solution de $(\mathscr{E})$. L'ensemble des solutions de $(\mathscr{E})$ sur $I$ est par conséquent~:
+    \begin{displaymath}
+      S=\left\{
+        \begin{array}{rl}
+          I\!&\longrightarrow\mathbb{R} \\
+          x\!&\longmapsto xe^x -e^x + \frac{a}{x}e^x+\frac{b}{x}e^{-x}
+        \end{array}
+        ,\ a,b\in\mathbb{R}
+        \right\}
+    \end{displaymath}
+
+    \paragraph{4.}
+    On cherche maintenant une fonction $f$ de $S$, telle que $f$ soit continue en 0, soit~:
+    \begin{displaymath}
+      \lim_{x\to 0^-}f(x)=\lim_{x\to 0^+}f(x)\in\mathbb{R},\text{ or }\lim_{x\to 0^-}f(x)=\lim_{x\to 0^+}f(-x) \iff \lim_{x\to 0^+}\left[f(x)-f(-x)\right]=0
+    \end{displaymath}
+    On étendra ensuite l'intervalle de définition de $f$ en la définissant par morceaux. On a donc~:
+    \begin{align*}
+      \lim_{x\to 0^+}\left[f(x)-f(-x)\right]=0 \iff \lim_{x\to 0^+}\left[xe^x -e^x + \frac{a}{x}e^x+\frac{b}{x}e^{-x} - \left(-xe^{-x} -e^{-x} + \frac{a}{-x}e^{-x}+\frac{b}{-x}e^{x}\right)\right]=0 \\
+      \iff \lim_{x\to 0^+}\left[\frac{a}{x}e^x + \frac{a}{x}e^{-x} + \frac{b}{x}e^{-x} + \frac{b}{x}e^x\right] + \overbrace{\lim_{x\to 0^+}\left[xe^x-e^x+xe^{-x}+e^{-x}\right]}^{0} = 0 \iff \lim_{x\to 0^+}\left[(a+b)\frac{e^x+e^{-x}}{x}\right]=0
+    \end{align*}
+    Or $\frac{e^x+e^{-x}}{x}$ diverge ici en $+\infty$. On a donc nécessairement $a+b=0$ pour obtenir la limite présentée, c'est-à-dire $b=-a$.
+
+    \paragraph{5.} Les solutions continues sur $\mathbb{R}$ de $(\mathscr{E})$ sont de la forme $f\colon x\mapsto xe^x-e^x+\frac{a}{x}e^x-\frac{a}{x}e^{-x}$. Cherchons $a$ tel que $\lim_{x\to 0}f(x)=0$. On tente de faire apparaître l'expression donnée en (\ref{EQ1}). On a donc~:
+    \begin{align*}
+      \lim_{x\to 0}f(x)=0 \iff \lim_{x\to 0}\left[xe^x-e^x+\frac{a}{x}e^x-\frac{a}{x}e^{-x}\right]=0 \iff \lim_{x\to 0}[xe^x-e^x] + \lim_{x\to 0}\left[ax\left(\frac{e^x}{x^2}-\frac{e^{-x}}{x^2}\right)\right]=0 \\
+      \iff -1 + \lim_{x\to 0}\left[ax\left(\frac{e^x-e^{-x}-2x+2x}{x^2}\right)\right] = 0
+      \iff \lim_{x\to 0}\left[ax\left(\frac{e^x-e^{-x}-2x}{x^2}\right)+ax\cdot\frac{2}{x}\right]=1 \\
+      \iff \lim_{x\to 0}\left[ax\left(\frac{e^x-e^{-x}-2x}{x^2}\right)\right]+\lim_{x\to 0} 2a=1 \iff 2a = 1 \iff a=\frac{1}{2}
+    \end{align*}
+    On en conclut que la seule solution de $(\mathscr{E})$ $f$ continue sur $\mathbb{R}$ telle que $f(0)=0$ est~:
+    \begin{displaymath}
+      f\colon\left\{
+      \begin{aligned}
+          x&\longmapsto (x-1)e^x + \frac{e^x}{2x}-\frac{e^{-x}}{2x}=(x-1)e^x+\frac{\sinh x}{x} &\text{ si } x\neq 0\\
+          x&\longmapsto 0 &\text{ si } x=0
+      \end{aligned}
+      \right.
+    \end{displaymath}
+\end{document}

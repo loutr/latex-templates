@@ -1,0 +1,198 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+
+\usepackage[top=1.9cm, bottom=1.9cm, left=1.9cm, right=1.9cm]{geometry}
+\usepackage{amssymb, amsmath, mathrsfs}
+
+\newcommand{\oo}[1]{+ o\!\left(#1\right)}
+\DeclareMathOperator{\dom}{dom}
+
+\title{\textbf{DM \No 11~: Polynômes de Tchebychev et problème de Bâle}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+  \hrulefill
+
+  \vspace{1.2cm}
+  \hrulefill
+
+  \section{Étude des polynômes de Tchebychev}
+
+  On considère la suite de polynômes $(T_n)_{n\in\mathbb{N}}$ définie par~:
+  \[
+  \left\{\begin{aligned}
+      (T_0,\, T_1) &= (1,\, X) \\
+      \forall n\in\mathbb{N},\ T_{n+2} &= 2XT_{n+1} - T_n
+  \end{aligned}
+  \right.
+  \]
+  Par la suite on ne fera pas de distinction graphique entre les polynômes et leurs fonctions associées. Par ailleurs, on peut déterminer les termes suivants~:
+  \[
+    T_2 = 2X\cdot X - 1 = 2X^2 - 1
+    \quad \mbox{et} \quad
+    T_3 = 2X \cdot (2X^2 - 1) - X = 4X^3 - 3X
+  \]
+
+  \subsection{Propriétés}
+  On considère la propriété $H_n\colon \forall k\in[\![0,\, n]\!],\ T_k = t_k X^k + P_k,\ \deg P_k < k$. À $n = 1$, la propriété est bien vérifiée car $1 = 1\cdot X^0 + 0$, $X = 1\cdot X^1 + 0$. On suppose donc maintenant qu'il existe $n \geqslant 1$ tel que $H_{n+1}$ est vraie. On a donc~:
+  \[
+    T_{n+2} = 2X\cdot T_{n+1} - T_n = 2X\cdot(t_{n+1} X^{n+1} + P_{n+1}) - (t_n X^n + P_n) = \underbrace{2t_{n+1}}_{t_{n+2}} X^{n+2} + \underbrace{(2XP_{n+1} - t_nX^n - P_n)}_{\deg \leqslant n + 1}
+  \]
+  D'où $H_{n+1}\Longrightarrow H_{n+2}$. On en conclut que $H_n$ est vraie pour tout $n\in\mathbb{N}$. On en déduit~:
+  \begin{itemize}
+    \item $\forall n\in\mathbb{N},\ \deg T_n = n$~;
+    \item $\forall n \geqslant 1,\ t_{n+1} = 2t_n \Longrightarrow t_n = 2^{n-1}$.
+  \end{itemize}
+
+  On considère maintenant une autre propriété qu'on démontrera aussi par récurrence (forte)~:
+  \[
+  L_n\colon \forall k\in[\![0,\, n]\!],\ \forall\theta\in\mathbb{R},\ T_k(\cos \theta) = \cos k\theta
+  \]
+  On fixera $\theta\in\mathbb{R}$ pour la suite de la démonstration. $L_1$ est vraie car $T_0(\cos\theta) = 1 = \cos 0$ et $T_1(\cos\theta) = \cos\theta = \cos 1\cdot\theta$. On rappelle préalablement que~:
+  \[
+  \forall (a,\, b)\in\mathbb{R}^2,\ \cos(a)\cos(b) = \frac{1}{2}(\cos(a + b) + \cos(a - b))
+  \]
+  On suppose maintenant qu'il existe $n \geqslant 1$, tel que $L_{n+1}$ est vraie. Évaluons $T_{n+2}(\cos\theta)$.
+  \begin{align*}
+    T_{n+2}(\cos\theta) &= 2\cos(\theta)T_{n+1}(\cos \theta) - T_n(\cos \theta) = 2\cos(\theta)\cos((n+1)\theta) - \cos(n\theta) \\
+    T_{n+2}(\cos\theta) &= 2\cdot \frac{1}{2}(\cos(\theta + (n+1)\theta) + \cos(\theta - (n+1)\theta)) - \cos(n\theta)
+    = \cos((n+2)\theta) + \cos(-n\theta) - \cos(n\theta) \\
+    T_{n+2}(\cos\theta) &= \cos((n+2)\theta)
+  \end{align*}
+  Ainsi $L_n$ est héréditaire. D'après le principe de raisonnement par récurrence, elle est donc vraie pour tout $n\in\mathbb{N}$.
+
+  \subsection{Valeurs particulières}\label{valeurs_particulieres}
+  Déterminons maintenant $T_n(1)$ et $T_n'(1)$ en utilisant la propriété précédente.
+  \[
+  T_n(1) = T_n(\cos 0) = \cos (n\cdot 0) = 1
+  \]
+  Pour déterminer le nombre dérivé de $T_n$ en 1, on calcule la limite du taux d'accroissement en ce point. Cette valeur est bien définie car $T_n$ est dérivable sur $\mathbb{R}$. On a $\cos{n\theta} - 1 \underset{0}{=} 1 - \frac{(n\theta)^2}{2} \oo{\theta^2} - 1$. On peut donc utiliser un équivalent~:
+  \[
+  \frac{T_n(X) - T_n(1)}{X - 1} = \frac{T_n(\cos \theta) - 1}{\cos \theta - 1} = \frac{\cos n\theta - 1}{\cos \theta - 1} \underset{0}{\sim} \frac{-\frac{n^2\theta^2}{2}}{-\frac{\theta^2}{2}} = n^2
+  \underset{\theta\to 0}{\longrightarrow} n^2 = T_n'(1)
+  \]
+  Avec $X = \cos \theta$ tel que $X \to 1 \Longrightarrow \theta \to 0$.
+
+  \subsection{Racines de $T_n$}\label{racines_de_tn}
+  La fonction $\cos$ est strictement monotone sur $[0,\, \pi]$ et continue. Elle établit donc une bijection de $[0,\, \pi]$ dans $\cos([0,\, \pi]) = [-1,\, 1]$. On en déduit~:
+  \[
+  \forall x\in[-1,\, 1],\ \exists! \theta\in[0,\, \pi],\ x = \cos \theta
+  \]
+  Sur $[-1,\, 1]$, on a donc~:
+  \begin{align*}
+    T_n(x) = 0 \iff T_n(\cos \theta) = 0 \iff \cos n\theta = 0
+    \iff n\theta = \frac{\pi}{2} + k\pi,\ k\in\mathbb{Z} \iff \theta = \frac{(2k + 1)\pi}{2n} \\
+    \text{Par ailleurs}\quad 0 \leqslant n\theta \leqslant \pi n
+    \Longrightarrow 0 \leqslant \frac{\pi}{2} + k\pi \leqslant \pi n \Longrightarrow -\frac{1}{2} \leqslant k \leqslant n - \frac{1}{2} \Longrightarrow k \in[\![0,\, n-1]\!]
+  \end{align*}
+  C'est-à-dire, après changement de variable~:
+  \[
+  \forall x\in[-1,\, 1],\ T_n(x) = 0 \iff x = x_k = \cos \frac{(2k - 1)\pi}{2n},\ k\in[\![1,\, n]\!] = I
+  \]
+  Chaque valeur de $k$ donne une opérande du cosinus distincte sur l'intervalle $[0,\, \pi]$, or $\cos$ est bijective donc injective sur cet intervalle, par conséquent toutes les valeurs prises par $x$ sont distinctes. On en dénombre $\#I = n$. Cependant $T_n$ est de degré $n$ est possède donc au plus $n$ racines, on en conclut que toutes les racines de $T_n$ sur $\mathbb{R}$ sont celles sur $[-1,\, 1]$.
+
+  \section{Lien avec le problème de Bâle}
+  On désigne par problème de Bâle la détermination de la limite de $(S_n)$ définie ci-dessous. On utilisera les propriétés des polynômes de Tchebychev pour la trouver.
+  \[
+  \forall n\in\mathbb{N}^*,\ S_n = \sum_{k=1}^n \frac{1}{k^2}
+  \]
+
+  \subsection{Convergence des suites étudiées}
+  Déterminons premièrement la décomposition en éléments simples de $\frac{1}{X(X-1)}$.
+  \begin{align*}
+    \frac{1}{X(X-1)} = \frac{a}{X-1} + \frac{b}{X} \Longrightarrow
+    \left\{\begin{aligned}
+    a &= \left.\frac{1}{X}\right|_{X=1} = 1 \\
+    b &= \left.\frac{1}{X-1}\right|_{X=0} = -1
+    \end{aligned}\right.
+    \Longrightarrow \frac{1}{X(X-1)} = \frac{1}{X-1} - \frac{1}{X}
+  \end{align*}
+  Cette nouvelle expression permet de télescoper la somme suivante~:
+  \[
+  \forall n\in\mathbb{N}^*,\ \sum_{k=2}^n \frac{1}{k(k-1)}
+  = \sum_{k=2}^n \left[\frac{1}{k-1} - \frac{1}{k}\right]
+  =  \sum_{j=1}^{n-1} \frac{1}{j} - \sum_{k=2}^n \frac{1}{k} = 1 - \frac{1}{n}
+  \]
+  À partir de laquelle on forme une majoration de $(S_n)$~:
+  \begin{align*}
+    \forall k\geqslant 2,\ k \geqslant k - 1 &\Longrightarrow \frac{1}{k^2} \leqslant \frac{1}{k(k-1)}
+    \Longrightarrow \sum_{k=2}^n \frac{1}{k^2} \leqslant \sum_{k=2}^n \frac{1}{k(k-1)}
+    \Longrightarrow 1 + \sum_{k=2}^n \frac{1}{k^2} \leqslant 1 + 1 - \frac{1}{n} \\
+    &\Longrightarrow S_n \leqslant 2 - \frac{1}{n} < 2
+  \end{align*}
+  Néanmoins on a $\forall n\in\mathbb{N}^*,\ S_{n+1} - S_n = \frac{1}{(n+1)^2} > 0$, donc $(S_n)$ est croissante. Puisqu'elle est majorée, on en conclut qu'elle converge. $\boxed{S_n \longrightarrow \ell \in\mathbb{R}}$.
+
+  On considère maintenant la suite suivante~:
+  \[
+  \forall n\in\mathbb{N}^*,\ S_n' = \sum_{k=1}^n \frac{1}{(2k - 1)^2}
+  \]
+  Grâce à laquelle on détermine une expression simplifiée de~:
+  \begin{align*}
+    S_{2n} &= \sum_{k=1}^{2n} \frac{1}{k^2} = 1 + \frac{1}{2^2} + \dots + \frac{1}{(2n - 1)^2} + \frac{1}{(2n)^2} =
+    \underbrace{\frac{1}{(2\cdot 1)^2} + \dots + \frac{1}{(2n - 2)^2} + \frac{1}{(2n)^2}}_{\text{termes pairs}}
+    + \underbrace{1 + \dots + \frac{1}{(2n - 3)^2} + \frac{1}{(2n - 1)^2}}_{\text{termes impairs}} \\
+    S_{2n} &= \sum_{k=1}^{n} \frac{1}{(2k)^2} + \sum_{k=1}^{n} \frac{1}{(2k - 1)^2}
+    = \frac{1}{4}\sum_{k=1}^{n} \frac{1}{k^2} + S'_n = \frac{1}{4}S_n + S'_n
+  \end{align*}
+  Cependant $\lim S_{2n} = \lim S_n = \ell$ par unicité de la limite, donc $S'_n$ converge par somme de suites convergentes. On note $S'_n \longrightarrow \ell' \in\mathbb{R}$ et en passant l'égalité à la limite on a $\boxed{\ell' = \frac{3}{4}\ell}$.
+
+  \subsection{Utilisation des polynômes de Tchebychev pour déterminer $\ell'$}
+  On utilisera la notation $x_k$ comme dans la section \ref{racines_de_tn}. $T_n$ possède donc $n$ racines simples, on peut alors décomposer en éléments simples la fraction rationnelle suivante.
+  \begin{align*}
+    \frac{T'_n}{T_n} = \frac{\alpha_1}{X - x_1} + \frac{\alpha_2}{X - x_2} + \dots + \frac{\alpha_n}{X - x_n}
+    = \sum_{k=1}^n \frac{\alpha_k}{X - x_k}
+  \end{align*}
+  On pose $\forall j\in[\![1,\, n]\!],\ T^*_{n,j}\in\mathbb{R}[X]$ tel que $T_n = (X - x_j)T^*_{n,j}$. Par la dérivée du produit on a en particulier~: \[T'_n(x_j) = 1\cdot T^*_{n,j}(x_j) + (x_j - x_j){T^*_{n,j}}'(x_j) = T^*_{n,j}(x_j)\]
+  Soit, en multipliant par $X - x_j$ l'expression obtenue précédemment et en l'évaluant ensuite~:
+  \begin{align*}
+    \frac{T'_n}{T_n} \cdot (X - x_j) = \frac{T'_n}{(X - x_j)T^*_{n,j}} \cdot (X - x_j) = \frac{T'_n}{T^*_{n,j}}
+    = \alpha_j + (X - x_j) \sum_{\substack{k=1 \\ k\neq j}}^n \frac{\alpha_k}{X - x_k} \\
+    \therefore X = x_j \Longrightarrow \frac{T'_n(x_j)}{T^*_{n,j}(x_j)} = \frac{T'_n(x_j)}{T'_n(x_j)} = \alpha_j
+  \end{align*}
+  Donc $\forall k\in[\![1,\, n]\!],\ \alpha_k = 1$, on a alors
+  \[
+  \frac{T'_n}{T_n} = \sum_{k=1}^{n} \frac{1}{X - x_k}
+  \]
+  En évaluant cette expression en $X = 1$, il vient, d'après les résultats de la section \ref{valeurs_particulieres},
+  \[
+  \frac{n^2}{1} = \sum_{k=1}^n \frac{1}{1 - x_k} \Longrightarrow \sum_{k=1}^n \frac{1}{1 - \cos \frac{(2k - 1)\pi}{2n}} = n^2
+  \]
+
+  On rappelle que $\forall a\in\mathbb{R},\ \cos 2a = 1 - 2\sin^2 a \iff \sin^2 a = \frac{1}{2}\left(1 - \cos 2a \right)$, ce qui permet de déterminer~:
+  \[
+  \sum_{k=1}^n \frac{1}{\sin^2 \frac{(2k-1)\pi}{4n}} = \sum_{k=1}^n \frac{1}{\frac{1}{2}\left(1 - \cos 2\cdot\frac{(2k - 1)\pi}{4n}\right)} = 2 \sum_{k=1}^n \frac{1}{1 - \cos \frac{(2k - 1)\pi}{2n}} = 2n^2
+  \]
+  Similairement on établit $\forall a\in]0,\, \pi/2[,\ \frac{1}{\tan^2 a} = \frac{\cos^2 a}{\sin^2 a} = \frac{1 - \sin^2 a}{\sin^2 a} = \frac{1}{\sin^2 a} - 1$, qu'on pourra utiliser car
+  \[
+   k \in[\![1,\, n]\!] \Longrightarrow \frac{(2k - 1)\pi}{4n} \in \left[\frac{\pi}{4n},\, 1 - \frac{\pi}{4n}\right] \subset ]0,\, \pi/2[
+  \]
+  D'où~:
+  \begin{align*}
+    \sum_{k=1}^n \frac{1}{\tan^2 \frac{(2k-1)\pi}{4n}} = \sum_{k=1}^n \left[\frac{1}{\sin^2 \frac{(2k-1)\pi}{4n}} - 1\right] = \sum_{k=1}^n \frac{1}{\sin^2 \frac{(2k-1)\pi}{4n}} - \sum_{k=1}^n 1 = 2n^2 - n
+  \end{align*}
+
+  \subsection{Conclusion}
+  Soit $x\in[0,\, \pi/2]$ et $t \in[0,\, x]$. On a directement~:
+  \[
+  \cos t \leqslant 1 \leqslant 1 + \tan^2 t \Longrightarrow
+  \int_0^x \cos(t)\mathrm dt \leqslant \int_0^x \mathrm dt \leqslant \int_0^x (1 + \tan^2 t)\mathrm dt
+  \Longrightarrow \sin x \leqslant x \leqslant \tan x
+  \]
+  On peut donc remplacer $x$ par une valeur convenable, celle-ci étant dans l'intervalle de validité de l'inégalité précédente.
+  \begin{align*}
+    0 \leqslant \sin \frac{(2k - 1)\pi}{4n} &\leqslant \frac{(2k - 1)\pi}{4n} \leqslant \tan \frac{(2k - 1)\pi}{4n} \\
+    \Longrightarrow 0 \leqslant \frac{1}{\tan^2 \frac{(2k - 1)\pi}{4n}} &\leqslant \left(\frac{4n}{(2k - 1)\pi}\right)^2 \leqslant \frac{1}{\sin^2 \frac{(2k - 1)\pi}{4n}}\ \because x\mapsto \frac{1}{x^2}\searrow \text{sur}\ \mathbb{R}^*_+ \\
+    \Longrightarrow \sum_{k=1}^n \frac{1}{\tan^2 \frac{(2k - 1)\pi}{4n}} &\leqslant \sum_{k=1}^n \frac{1}{(2k - 1)^2}\cdot \left(\frac{4n}{\pi}\right)^2 \leqslant \sum_{k=1}^n \frac{1}{\sin^2 \frac{(2k - 1)\pi}{4n}} \\
+    \Longrightarrow 2n^2 - n &\leqslant S'_n \cdot \frac{16n^2}{\pi^2} \leqslant 2n^2 \\
+    \Longrightarrow \frac{\pi^2}{8} - \frac{\pi^2}{16n} &\leqslant S'_n \leqslant \frac{\pi^2}{8}
+  \end{align*}
+  Or $\lim \frac{\pi^2}{8} - \frac{\pi^2}{16n} = \lim \frac{\pi^2}{8} = \frac{\pi^2}{8}$. D'après le théorème des gendarmes, on en conclut que $\lim S'_n = \frac{\pi^2}{8} = \ell'$. Par conséquent~:
+  \[
+  \ell = \frac{4}{3}\ell' = \frac{\pi^2}{6} \Longrightarrow \boxed{\lim_{n\to\infty} \sum_{k=1}^n \frac{1}{k^2} = \frac{\pi^2}{6}}
+  \]
+\end{document}

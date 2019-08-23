@@ -1,0 +1,193 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\DecimalMathComma
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{xcolor}
+\usepackage{tikz,tkz-tab}
+\usepackage{wrapfig}
+\usepackage{subcaption}
+\newcommand{\abs}[1]{\left\vert #1 \right\vert}
+
+\title{\textbf{Mathématiques~: Calcul intégral}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+\begin{document}
+ \maketitle
+ \hrulefill
+
+ \vspace{2cm}
+
+ \hrulefill
+
+\section{Étude des variations de la fonction proposée}
+    On considère la fonction $f$ définie ci-après et sa courbe représentative $\mathscr{C}$ dans un repère orthonormé $(O;\vec\imath,\vec\jmath)$ du plan.
+    \begin{displaymath}
+        f:  \left\{
+            \begin{array}{ll}
+             \mathbb{R} \!&\mapsto \mathbb{R} \\
+             x \!&\mapsto (x+2)e^{-x}
+            \end{array}
+            \right.
+    \end{displaymath}
+    Recherchons les éventuelles intersections de $\mathscr{C}$ avec les axes du repère, soient les points $A(0\,;\,f(0))$ et $B(\alpha\,;\,0)$, avec $\alpha$ tel que $f(\alpha) = 0$. On a donc~:
+    \begin{align*}
+     &f(0) = (0+2)e^{-0} = 2\times 1 = 2 \\
+     &f(\alpha) = 0 \Leftrightarrow (\alpha + 2)e^{-\alpha}=0 \Leftrightarrow \alpha + 2 = 0\Leftrightarrow\alpha =-2\quad\because\forall x\in\mathbb{R},\, e^{-x}\neq 0
+    \end{align*}
+    Les points $A(0\,;\,2)$ et $B(-2\,;\,0)$ sont donc les intersections de $\mathscr{C}$ avec respectivement l'axes des ordonnées et des abscisses dans le plan. Étudions maintenant les limites de la fonction en $-\infty$ et en $+\infty$. On a~:
+    \begin{gather*}
+     \lim_{x\to -\infty} x+2 = -\infty\;;\quad \lim_{x \to -\infty} e^{-x} = +\infty\quad\therefore\lim_{x \to -\infty} f(x) = \lim_{x \to -\infty} (x+2)e^{-x} = -\infty \\
+     \lim_{x\to \infty} -xe^{-x} = \lim_{X\to -\infty} Xe^X = 0 \Rightarrow \lim_{x\to \infty} xe^{-x} = 0\quad\therefore\lim_{x\to\infty} (x+2)e^{-x} = \lim_{x\to\infty} xe^{-x}+2e^{-x} = 0
+    \end{gather*}
+    Par limite de produit, de somme et de fonction composée. On en déduit l'existence d'une droite d'équation $y=0$, asymptote horizontale à $\mathscr{C}$ en~$+\infty$. Déterminons les variations de la fonction, en considérant sa fonction dérivée associée $f'$ sur $\mathbb{R}$, telle que~: $f'(x)=e^{-x} +(x+2)(-e^{-x})=(-x-1)e^{-x}$. Cherchons les éventuelles valeurs pour lesquelles la dérivée s'annule, ainsi que les intervalles sur lesquels elle est positive.
+
+    \begin{displaymath}
+    f'(x) > 0 \Leftrightarrow (-x-1)e^{-x} > 0 \Leftrightarrow -x-1 > 0\Leftrightarrow x < -1\quad\because\forall x\in\mathbb{R},\, e^{-x} > 0
+    \end{displaymath}
+        On a par ailleurs $f(-1) = (-1+2)e^{-(-1)} = e$. Construisons le tableau de variations de $f$.
+    \begin{figure}[h]
+     \begin{center}
+      \begin{tikzpicture}
+       \tkzTabInit{$x$ / 1, $f'$ / 1, $f$ / 1.5}{$-\infty$, $-1$, $+\infty$}
+       \tkzTabLine{,+, 0, -,}
+       \tkzTabVar{-/ $-\infty$, +/ $e$, -/ $0$}
+      \end{tikzpicture}
+     \end{center}
+     \caption{Tableau de variations de la fonction d'étude $f$.}
+    \end{figure}
+
+
+\section{Calcul de l'aire sous $\mathscr{C}$}
+    On cherche à déterminer l'aire délimitée par la courbe représentative de $f$, l'axe des abscisses et les droites d'équations $x=0$, $x=1$. On notera cette aire $a$ et on a, puisque $f$ est positive sur $[0\,;\,1]$~:
+    \begin{displaymath}
+     a = \int\limits_0^1 f(x)\mathrm{d}x
+    \end{displaymath}
+
+\subsection{Calcul par approximation}
+    On réalisera une première approximation de $a$ en découpant l'aire sous la courbe en un nombre arbitrairement grand $n$ de rectangles de largeur $\frac{1}{n}$ et de hauteur $f(x_0)$, avec $x_0$ l'abscisse du point le plus à gauche du rectangle. On note $a_n$ l'aire obtenue par cette approximation. L'expression de $a_n$ est donc~:
+    \begin{displaymath}
+     n\in\mathbb{N}_*\quad a_n = \frac{1}{n}\times f(0) +\frac{1}{n}\times f\!\left(\frac{1}{n}\right)+\dotsb+\frac{1}{n}\times f\!\left(\frac{n-1}{n}\right)=\frac{1}{n}\left[f(0)+f\!\left(\frac{1}{n}\right)+\dotsb +f\!\left(\frac{n-1}{n}\right)\right]
+     =\frac{1}{n}\sum_{k=0}^{n-1} f\!\left(\frac{k}{n}\right)
+    \end{displaymath}
+
+    On considère l'algorithme donné à la figure \ref{ALGO}, basé sur l'expression donnée ci-dessus.
+\begin{figure}[h]
+  \begin{subfigure}{0.4\textwidth}
+    \fbox{\begin{minipage}{6.2cm}
+    \begin{verbatim}
+
+    Variables : \\
+        n, k : nombres entiers naturels \\
+        S : nombre réel \\
+
+    Initialisation : \\
+        S prend la valeur 0 \\
+        Demander la valeur de n \\
+
+    Traitement : \\
+        Pour k allant de 0 à n - 1 \\
+        S prend la valeur S + f(k/n) \\
+        Fin pour \\
+        S prend la valeur S/n \\
+
+    Sortie : \\
+        Afficher S
+    \end{verbatim}
+    \end{minipage}}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \begin{tikzpicture}[scale=1.3]
+    \foreach \x in {0,1,...,3} \fill[color=gray!40] ({\x/4}, 0) rectangle ({\x/4 + 0.25}, {(2+\x/4)*e^(-\x/4)});
+    \draw [thin, color=gray!25] (-1,-1) grid (3,3);
+    \draw (-1,0) -- (3,0);
+    \draw (0,-1) -- (0,3);
+    \foreach \x in {0,1,...,3} \draw ({\x/4}, 0) rectangle ({\x/4 + 0.25}, {(2+\x/4)*e^(-\x/4)});
+    \draw [domain=-1:3,samples=200] plot (\x,{(\x +2)*e^(-\x)}) node [left, above] {$\mathscr{C}$};
+    \draw[->, >=stealth, thick] (0,0)--(1,0) node[below]{$\vec\imath$};
+    \draw[->, >=stealth, thick] (0,0)--(0,1) node[left]{$\vec\jmath$};
+    \node[below left] at (0,0){O};
+    \end{tikzpicture}
+  \end{subfigure}
+  \begin{subfigure}{0.3\textwidth}
+    \begin{tikzpicture}[scale=1.3]
+    \foreach \x in {0,1,...,9} \fill[color=gray!40] ({\x/10}, 0) rectangle ({\x/10 + 0.1}, {(2+\x/10)*e^(-\x/10)});
+    \draw [thin, color=gray!25] (-1,-1) grid (3,3);
+    \draw (-1,0) -- (3,0);
+    \draw (0,-1) -- (0,3);
+    \foreach \x in {0,1,...,9} \draw ({\x/10}, 0) rectangle ({\x/10 + 0.1}, {(2+\x/10)*e^(-\x/10)});
+    \draw [domain=-1:3,samples=200] plot (\x,{(\x +2)*e^(-\x)}) node [left, above] {$\mathscr{C}$};
+    \draw[->, >=stealth, thick] (0,0)--(1,0) node[below]{$\vec\imath$};
+    \draw[->, >=stealth, thick] (0,0)--(0,1) node[left]{$\vec\jmath$};
+    \node[below left] at (0,0){O};
+    \end{tikzpicture}
+  \end{subfigure}
+  \caption{Algorithme calculant $a_n$ pour $n$ donné. Les parties grisées des graphiques suivants représentent respectivement $a_4$ et $a_{10}$.}
+  \label{ALGO}
+\end{figure}
+
+    Cet algorithme renvoie par exemple les valeurs suivantes~:
+    \begin{displaymath}
+     a_4 = \frac{1}{4}\left[f(0)+f\!\left(\frac{1}{4}\right)+f\!\left(\frac{2}{4}\right)+f\!\left(\frac{3}{4}\right)\right] \simeq 1,642 \;;\quad
+     a_{10} = \frac{1}{10}\left[f(0)+f\!\left(\frac{1}{10}\right)+\dotsb+f\!\left(\frac{9}{10}\right)\right] \simeq 1,574
+    \end{displaymath}
+\subsection{Utilisation d'une primitive de $f$}
+    On désire maintenant trouver une primitive de $f$ sur $\mathbb{R}$, qu'on notera $F$~; afin de calculer $a$. Soient deux fonctions $u$ et $v$ définies et dérivables sur un intervalle $I$ ainsi que deux réels $a$ et $b$ distincts appartenant à cet intervalle, avec $b>a$. On a~:
+    \begin{align}
+     (uv)' = u'v+uv' & \Rightarrow \int\limits_a^b (uv)'(x)\mathrm{d}x = \int\limits_a^b (u'v+uv')(x)\mathrm{d}x \Leftrightarrow \left[(uv)(x)\right]_a^b = \int\limits_a^b (u'v)(x)\mathrm{d}x + \int\limits_a^b (uv')(x)\mathrm{d}x \\
+     & \Leftrightarrow \int\limits_a^b (uv')(x)\mathrm{d}x = \left[(uv)(x)\right]_a^b - \int\limits_a^b (u'v)(x)\mathrm{d}x
+    \label{int}
+    \end{align}
+
+    On fixe donc les fonctions suivantes~:
+    \begin{displaymath}
+     u:  \left\{
+            \begin{array}{ll}
+             \mathbb{R} &\mapsto \mathbb{R} \\
+             x &\mapsto x+2
+            \end{array}
+            \right.
+     \text{et } v:  \left\{
+            \begin{array}{ll}
+             \mathbb{R} \!&\mapsto \mathbb{R}_- \\
+             x \!&\mapsto -e^{-x}
+            \end{array}
+            \right.
+    \text{ainsi que leurs dérivées associées sur $\mathbb{R}$~: }
+    u': x\mapsto 1 \text{ et } v': x\mapsto e^{-x}
+    \end{displaymath}
+
+    On utilise l'équation~$(2)$ obtenue précédemment avec ces fonctions. On a~:
+    \begin{align*}
+     \int\limits_a^b (uv')(x)\mathrm{d}x = \left[(uv)(x)\right]_a^b - \int\limits_a^b (u'v)(x)\mathrm{d}x \Leftrightarrow \int\limits_a^b (x+2)e^{-x}\mathrm{d}x = \left[(x+2)(-e^{-x})\right]_a^b - \int\limits_a^b -e^{-x}\mathrm{d}x \\
+    \Leftrightarrow \int\limits_a^b (x+2)e^{-x}\mathrm{d}x = \left[(-x-2)(e^{-x})\right]_a^b - \left[e^{-x}\right]_a^b = \left[(-x-2)(e^{-x})-e^{-x}\right]_a^b = \left[(-x-3)(e^{-x})\right]_a^b \\
+    \Leftrightarrow \int\limits_a^b f(x)\mathrm{d}x = \left[(-x-3)(e^{-x})\right]_a^b = \left[F(x)\right]_a^b
+    \end{align*}
+    On vérifie ensuite~:
+    \begin{align*}
+     F'(x) = (-1)(e^{-x})+(-x-3)(-e^{-x}) = -e^{-x} + (x+3)e^{-x} = (x+2)e^{-x} = f(x)
+    \end{align*}
+
+    On en conclut qu'une primitive de $f$ est de la forme $F(x) = (-x-3)e^{-x} + c,\;c\in\mathbb{R}$. À partir de cette fonction on peut calculer littéralement $a$, soit~:
+    \begin{align*}
+     a &= \int\limits_0^1 f(x)\mathrm{d}x = \left[F(x)\right]_0^1 = F(1)-F(0) = (-1-3)e^{-1} - (-0-3)e^0 = -4e^{-1} - (-3) \\
+     a &= 3 - \frac{4}{e} \simeq 1,528
+    \end{align*}
+    On note finalement $\varepsilon_n$ l'écart de valeur entre $a$ et $a_n$, c'est-à-dire l'erreur due à l'approximation faite par somme d'aire de rectangles. Soit~:
+    \begin{gather*}
+     \varepsilon_4 = a_4-a \simeq 1,642 - 1,528 \simeq 0,113 \\
+     \varepsilon_{10} = a_{10}-a \simeq 1,574 - 1,528 \simeq 0,045
+    \end{gather*}
+
+
+    \begin{figure}[b]
+     \begin{center}
+      Document réalisé avec \LaTeX.
+     \end{center}
+    \end{figure}
+
+\end{document}
