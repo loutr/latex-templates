@@ -9,5 +9,5 @@ This repository aims to help other **LaTeX** users in their research of producin
 * Correct and optimize certain files.
 
 ## About
-This documents were NOT made by a professional, and I do not guarantee they were written in the most efficient way.
+Theses documents were NOT made by a professional, and I do not guarantee they were written in the most efficient way.
 Folders are named after the class in which the documents were created. `'filename'.source` contains file-related documents, such as images used in it, the exercise's questions, etc. 'DM' stands for homework *("Devoir à la Maison")*.
