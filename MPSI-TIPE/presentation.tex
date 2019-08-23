@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[table]{xcolor}
+\usepackage[top=2cm, bottom=1.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\title{Exploration sous-marine autonome \\ \normalsize Travaux interdisciplinaires personnels encadrés}
+\author{Pierre-Louis \textsc{Lamaze}, Guillaume \textsc{Richaud} et Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+\rhead{Lycée Roosevelt, Reims -- MPSI 2018-2019}
+\cfoot{}
+
+\section*{Mots-clés et répartition du travail}
+
+\begin{center}
+  \rowcolors{2}{gray!25}{white}
+  \begin{tabular}{ll}
+    \rowcolor{gray!50}
+    \bf Mots-clés & \bf Keywords\\
+    Génération procédurale & Procedural generation \\
+    Fonction de bruit & Noise function \\
+    Modélisation en 3D & 3D modelisation \\
+    Topographie & Topography / HeightMap \\
+    Géométrie différentielle & Differencial geometry \\
+    Simulation informatique & Simulation \\
+    Heuristiques & Heuristics \\
+    Apprentissage approfondi & Deep learning \\
+    Réseaux neuronaux & Neural networks \\
+    Reconaissance d'espèce & Species recognition \\
+  \end{tabular}
+\end{center}
+
+\paragraph{} Cette étude sera envisagée sous différents angles~:
+\begin{itemize}
+  \item Modélisation et génération d'un environnement similaire aux fonds sous-marins à des fins de simulations \cite{genevaux:tel-01196438, guerin:tel-01635126, McHugh:2016, gustavson:2005} (Pierre-Louis \textsc{Lamaze})~;
+  \item Aperçu du dilemme exploitation/exploration dans le déplacement en milieu marin. \cite{sigaud:inria-00326864, benzaki:2017, manhaes:2017} (Guillaume \textsc{Richaud})~;
+  \item Utilisation d'un algorithme d'apprentissage approfondi pour repérer et classer des espèces vivant dans les fonds-marins \cite{3B1B:2018, Branson:2014, Rathi:2018} (Lucas \textsc{Tabary}).
+\end{itemize}
+
+\bibliographystyle{siam}
+\bibliography{../references.bib}
+
+\end{document}

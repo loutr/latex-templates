@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[table]{xcolor}
+\usepackage[top=2cm, bottom=1.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\renewcommand{\headrulewidth}{0pt}
+
+\title{Exploration sous-marine autonome~: Résumé de document\\ \normalsize Travaux interdisciplinaires personnels encadrés}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+\rhead{Lycée Roosevelt, Reims -- MPSI 2018-2019}
+
+\paragraph{} La catégorisation d'images à l'aide de processus basés sur les technologies de l'intelligence artificielle s'est normalisée au cours des dernières années. L'étude ici-résumée vise à concevoir un algorithme basé sur les \textit{réseaux neuronaux convolutifs} pour la reconnaissance de caractéristiques de différents oiseaux à partir de photos, à des fins de catégorisation. On adaptera ainsi cette logique de fonctionnement pour la détection d'espèces maritimes --- la majeure différence résidant dans l'ensemble des données d'apprentissage du programme.
+
+\paragraph{} Le but de l'algorithme étant de distinguer les espèces d'oiseaux et les classifier, l'ensemble des données d'étude\footnote{Données acquises le plus souvent \textit{via} une banque de données sur lesquelles «~s'entraîne~» l'algorithme} regroupent un ensemble de points repères \textit{(keypoints)}, c'est-à-dire un ensembles de pixels de l'image caractéristique. On recherche ainsi la transformation de l'image donnant le meilleur résultat (minimum), qu'on notera $w^*_{tp}$. La formule ci-dessous représente ainsi la détermination d'un minimum par recherche sur toutes les transformations possibles $w$ (translation, homotéthie, etc.) celle qui correspondra à une distance minimale entre les points détectés ($y_{tj}$) de l'ensemble de points d'intérêts $S_p$.
+
+\begin{displaymath}
+    w^*_{tp} = \underset{w\in\mathcal{W}}{\arg\min} \sum_{j\in S_p} || \hat{y}_{i_pj} - W(y_{tj},w) ||^2
+\end{displaymath}
+
+\paragraph{} En déterminant ainsi la transformation la plus compatible, il est possible d'établir une relation entre l'image et la caractéristique \textit{(feature)} pour alors affirmer l'existence d'une telle caractéristique sur l'image.
+
+\paragraph{} La partie du programme basée sur le réseaux neuronal vise à la détermination automatique de l'emplacement de ces points d'intérêts. Ainsi le programme est testé sur une grande série de données~; en l'occurence des images d'oiseaux, annotées des poses attendues. À chaque itération l'ensemble du réseau neuronal détermine en sortie les points supposés être de référence \textit{(keypoints)}. On créée à partir de l'écart au résultat attendu une fonction de coût, qu'on cherche ensuite à minimiser~; en utilisant le principe de rétropropagation \textit{(backpropagation)}, qui n'est pas détaillé ici.
+
+
+
+\nocite{Branson:2014}
+\bibliographystyle{siam}
+\bibliography{../references.bib}
+
+\end{document}

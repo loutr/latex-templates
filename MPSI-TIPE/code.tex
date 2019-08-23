@@ -1,0 +1,247 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[table]{xcolor}
+% \DecimalMathComma
+\usepackage[top=1.9cm, bottom=1.9cm, left=2.9cm, right=2.9cm]{geometry}
+\usepackage{amssymb, amsmath}
+% \usepackage{tikz}
+\usepackage{listings}
+
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{darkgray}{rgb}{0.2,0.2,0.2}
+\definecolor{dark}{rgb}{0,0,0}
+\lstMakeShortInline[columns=fixed]£
+
+\lstdefinestyle{Frame}{
+  frame=tb,
+  % language=Python,
+  basicstyle={\small\ttfamily\color{darkgray}},
+  breaklines=true,
+  numbers=left,
+  keywordstyle=\color{dark},
+  commentstyle=\color{gray},
+  breakatwhitespace=true,
+  % otherkeywords={fst, snd, =, !}
+}
+
+\lstdefinestyle{Py}{language=Python, style=Frame}
+\lstdefinestyle{Bash}{language=bash, style=Frame}
+
+\title{Utilisation de l'apprentissage profond dans la reconnaissance d'espèces sous-marines \\[0.5em]
+\large Code source en \textsc{Bash} et \textsc{Python}, appuyé sur \textsc{TensorFlow}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle
+
+  \section{Traitement des données}
+
+  \paragraph{} Les données récupérées de l'ensemble \textit{Fish4Science} ne sont pas sous une présentation convenable. Il convient de les traiter, en les déplacement et le renommant convenablement. Les images sont soit de vraies photos, soit des masques binaires (qui permettent de de dévoiler la forme du poisson sur l'image). Il convient de déplacer les images dans un nouveau dossier, en créant un fichier CSV regroupant les couples (ID de la photo, numéro de l'espèce). Le nouveau dossier formera alors la séparation images de test \textit{(test)} et d'entraînement \textit{(train)}.
+
+  \begin{figure}[h]
+    \begin{lstlisting}[style=bash]
+#!/bin/bash
+# Structure originale : <fish/mask>_image/<fish/mask>_<no_espece>/ <fish/mask>_<no_inutile>_<id_image>.png
+# Structure souhaitée : <test/train>/<id_image><m/i>.png + fichier CSV indiquant les correspondances ID <-> espèce
+
+mkdir -p images images/test images/train
+
+for folder in fish_image/*; do
+  if [[ -d $folder ]]; then
+    species=$(echo $folder | sed -r 's/.*_0*([0-9]*)$/\1/g') # Numéro de l'espèce
+    echo "Traitement de l'espèce $species"
+    for image in ${folder}/*; do
+      maskfile=$(echo $image | sed -r 's/fish/mask/g') # masque associé à l'image
+      fish_id=$(echo $image | sed -r 's/.*_0*([0-9]*)\.png/\1/g') # ID de l'image
+      destination="train"
+      if grep -Fxq "$fish_id" test_index; then # Si l'ID de l'image fait parti des images de test
+        destination="test"
+      fi
+      mv $image images/${destination}/${fish_id}i.png
+      mv $maskfile images/${destination}/${fish_id}m.png
+      echo "${fish_id}, ${species}" >> images/${destination}_labels.csv
+    done
+  fi
+done
+    \end{lstlisting}
+    \caption{Déplacement et renommage des fichiers -- \texttt{name\_formatting.sh}}
+  \end{figure}
+
+  \paragraph{} On cherche ensuite à rogner toutes les images pour obtenir un format unique de 100 par 100 pixels, afin de pouvoir fournir les données au réseau (qui sera construit pour recevoir des images de telle dimension).
+
+  \begin{figure}[h]
+    \begin{lstlisting}[style=Py]
+from PIL import Image
+import glob
+
+working_directories = ['images/train', 'images/test']
+
+for directory in working_directories:
+    for image in glob.glob(directory + "/*.png"):
+        im = Image.open(image)
+        width, height = im.size
+        if width == 100 and height == 100: # L'image est déjà dimensionnée
+            continue
+        new = min(width, height)
+        left = (width - new) / 2
+        top = (height - new) / 2
+        right = (width + new) / 2
+        bottom = (height + new) / 2
+
+        im_new = im.crop((left, top, right, bottom)).resize((100, 100))
+        im_new.save(image, 'PNG')
+\end{lstlisting}
+    \caption{Rognage des différentes images -- \texttt{image\_formatting.py}}
+  \end{figure}
+
+\section{Création du module d'acquisition des données}
+
+\paragraph{} On crée une interface (un module \textsc{Python}) permettant l'acquisition des données sous une forme utilisable par le réseau (en l'occurence, des \texttt{numpy.array}s).
+
+  \begin{lstlisting}[style=Py]
+from PIL import Image
+import numpy as np
+import random
+import pickle
+
+PART_OF_TEST = 0.1
+NUM_IMAGES = 27370
+NUM_TRAIN_IMAGES = int(PART_OF_TEST * NUM_IMAGES)
+NUM_TEST_IMAGES = NUM_IMAGES - NUM_TRAIN_IMAGES
+
+def generate_test_index(path='fishdataset/test_index'):
+    """Génère une liste aléatoire d'IDs de photos pour les séparer en deux groupes test/train.
+       Son utilisation doit être couplée à la génération des fichiers via 'name_formatting.sh'."""
+    INDEX = random.sample(range(1, NUM_IMAGES + 1), int(PART_OF_TEST * NUM_IMAGES))
+    with open(path, 'w') as file:
+        for elt in INDEX:
+            file.write(str(elt) + '\n')
+
+def acquire_dataset(split='train'):
+    """Renvoie deux `numpy.array`s contenant les ensembles des images et des étiquettes."""
+    try: # Récupère s'ils existent les arrays déjà construits
+        with open('fishdataset/images/' + split + '_images.pickle', 'rb') as f:
+            images = pickle.load(f)
+        with open('fishdataset/images/' + split + '_labels.pickle', 'rb') as f:
+            labels = pickle.load(f)
+        return images, labels
+    except FileNotFoundError:
+        pass
+
+    ids, labels = [], []
+    with open('fishdataset/images/' + split + '_labels.csv') as csv_file:
+        for line in csv_file.readlines():
+            id, label = line.strip().split(',', maxsplit=2)
+            ids.append(id)
+            labels.append(int(label) - 1)
+
+    # `mapping` des valeurs du dataset pour obtenir les véritables couples (tenseur, étiquette)
+    def associate_image(id):
+        path = 'fishdataset/images/' + split + '/' + id
+
+        image = Image.open(path + 'i.png')
+        mask = Image.open(path + 'm.png')
+
+        image_array = np.array(image)
+        mask_array = np.array(mask)
+
+        image = np.dstack((image_array, mask_array)) # Concatène les array sur la 4e dimension (canaux RGB-Masque)
+        return image
+
+    images = np.array([associate_image(id) for id in ids], dtype=np.float16)
+    labels = np.array(labels)
+
+    # Sauvegarde les arrays pour réutilisation
+    with open('fishdataset/images/' + split + '_images.pickle', 'wb') as f:
+        pickle.dump(images, f)
+    with open('fishdataset/images/' + split + '_labels.pickle', 'wb') as f:
+        pickle.dump(labels, f)
+
+    return images, labels
+  \end{lstlisting}
+  \vspace*{-0.3cm}
+  \begin{figure}[ht] % Oui, c'est une ruse moche. (permet le découpage du code sur deux pages tout en gardant une légende)
+    \caption{Module d'acquisition des données -- \texttt{fishdataset.py}}
+  \end{figure}
+
+  \section{Construction et entraînement du réseau}
+
+  \paragraph{} La construction du réseau se fait de manière opaque à l'aide de \textsc{TensorFlow}. On décrit l'architecture du réseau ainsi que la méthode d'optimisation (diminution de la fonction de coût). On a aussi ajouté des fonctions permettant de rapidement sauvegarder ou charger un modèle.
+
+  \paragraph{} On a construit le graphe d'évolution de la précision et de la perte à partir du dictionnaire généré automatiquement \texttt{model.history.history}.
+
+  \begin{lstlisting}[style=Py]
+import fishdataset
+from tensorflow.keras import layers, models
+
+train_images, train_labels = fishdataset.acquire_dataset(split='train')
+test_images, test_labels = fishdataset.acquire_dataset(split='test')
+
+# Passage au bon format des images
+train_images, test_images = train_images / 255.0, test_images / 255.0
+
+model = models.Sequential()
+
+def build_cnn():
+    model.add(layers.Conv2D(32, (5, 5), activation='relu', input_shape=(100, 100, 4)))
+    model.add(layers.MaxPooling2D((3, 3)))
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.MaxPooling2D((2, 2)))
+    model.add(layers.Conv2D(64, (3, 3), activation='relu'))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(100, activation='relu'))
+    model.add(layers.Dropout(0.8))
+    model.add(layers.Dense(64, activation='relu'))
+    model.add(layers.Dense(23, activation='softmax'))
+
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+def build_rathi():
+    model.add(layers.Conv2D(32, (5, 5), activation='relu', input_shape=(100, 100, 4)))
+    model.add(layers.MaxPooling2D((5, 5)))
+    model.add(layers.Conv2D(64, (5, 5), activation='relu', padding='same'))
+    model.add(layers.MaxPooling2D((5, 5)))
+    model.add(layers.Conv2D(64, (5, 5), activation='relu', padding='same'))
+    model.add(layers.Flatten())
+    model.add(layers.Dense(100, activation='relu'))
+    model.add(layers.Dropout(0.8))
+    model.add(layers.Dense(23, activation='softmax'))
+
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+def build_multilayer_perceptron():
+    model.add(layers.Flatten())
+    model.add(layers.Dense(1000, activation='relu'))
+    model.add(layers.Dense(500, activation='relu'))
+    model.add(layers.Dense(100, activation='relu'))
+    model.add(layers.Dense(23, activation='softmax'))
+
+    model.compile(optimizer='adam',
+                  loss='sparse_categorical_crossentropy',
+                  metrics=['accuracy'])
+
+def train_model(epochs=10):
+    model.fit(train_images, train_labels, epochs=epochs)
+
+def test_model():
+    test_loss, test_acc = model.evaluate(test_images, test_labels)
+    print(test_acc)
+
+def save_model(path='state.h5'):
+    model.save(path)
+
+def retrieve_model(path='state.h5'):
+    return models.load_model(path)
+  \end{lstlisting}
+  \vspace*{-0.3cm}
+  \begin{figure}[ht] % Oui, c'est la même ruse.
+    \caption{Fichier principal -- \texttt{main\_cnn.py}}
+  \end{figure}
+\end{document}

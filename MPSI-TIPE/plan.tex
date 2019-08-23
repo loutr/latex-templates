@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[french]{babel}
+\usepackage[top=2cm, bottom=1.5cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\title{Utilisation d'un algorithme d'apprentissage profond dans la reconnaissance d'espèces sous-marines \\ \normalsize Travaux interdisciplinaires personnels encadrés}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+\rhead{Lycée Roosevelt, Reims -- MPSI 2018-2019}
+\cfoot{}
+
+\section{Introduction}
+  L'exploration sous-marine est au cœur d'enjeux contemporains et importants~: l'impact du dérèglement climatique sur la biodiversité des espaces aquatiques doit pouvoir être mesuré. Il peut ainsi être intéressant de reconnaître une espèce sous-marine à partir de méthodes automatisées, afin de permettre un dénombrement de la faune --- et par là, une étude de la biodiversité --- à plus grande échelle, et avec plus d'efficacité qu'une méthode manuelle. On tentera au cours de cet exposé de répondre aux questions suivantes~: \textit{l'intelligence artificielle est-elle une méthode efficace de reconnaissance d'espèces~? Parmi les méthodes proposées, laquelle est la plus efficace~?}
+
+\section{Plan détaillé}
+  \subsection{Théorie des structures informatiques en place dans un réseau neuronal}
+    \begin{enumerate}
+      \item Éléments structurants d'un réseau neuronal. On définira ici les concepts de neurone artificiel et la manière dont ils sont interconnectés. On considérera aussi l'utilisation des fonctions d'activation (sigmoïde, \textit{ReLU})~;
+      \item Formalisation mathématique (cas du perceptron multicouche, introduit ensuite) \cite{3B1B:2018}.
+      \item Comment le réseau «~apprend-il~»~? Explication du principe de rétropropagation et formalisation \textit{via} l'analyse \cite{Rojas:1996}.
+    \end{enumerate}
+  \subsection{Algorithmes d'apprentissage profond~: principes et utilisations}
+    \begin{enumerate}
+      \item Perceptron multicouche \textit{(MLP)}~;
+        \begin{itemize}
+          \item Présentation générale~: le \textit{MLP} comme modèle élémentaire~;
+          \item Explicitation des formules de rétropropagation dans ce cas \cite{3B1B:2018}~;
+          \item Avantages et inconvénients du modèle (conception et mise en place, temps d'apprentissage).
+        \end{itemize}
+      \item Utilisation d'un réseau de neurones convolutifs \textit{(CNN)}~;
+        \begin{itemize}
+          \item Spécificités du \textit{CNN}~: concept de couche de convolution, de couche de \textit{pooling} \cite{Rathi:2018}~;
+          \item Utilisation des filtres à travers les différentes couches~: pré-traitement de l'image dans un but de minimisation du temps d'apprentissage \cite{Rathi:2018}~;
+          \item Différences avec le perceptron multicouche simple~: intérêt de la démarche, cas d'utilisation.
+        \end{itemize}
+      \item Cas réel d'étude.
+        \begin{itemize}
+          \item Utilisation des banques de données, choix dans la démarche, mise en forme des données pour les traiter \cite{Rathi:2018}~;
+          \item Adaptation au problème donné~: configuration technique et mise en place de l'algorithme \cite{TF}.
+        \end{itemize}
+    \end{enumerate}
+  \subsection{Comparaison des résultats sur les différentes méthodes}
+    \begin{enumerate}
+      \item Choix des critères de comparaison~: comment distinguer et classer les différents algorithmes~;
+      \item Résultats et analyse~: comparaison avec d'autres modèles étudiés.
+    \end{enumerate}
+
+\section{Conclusion}
+  On conclura finalement sur l'efficacité des différents algorithmes proposés --- c'est-à-dire leur intérêt réel dans la démarche ---, puis en ouvrant sur les autres problématiques liées à la mise un place d'un tel système. On présentera par ailleurs d'autres applications (proches) de l'intelligence artificielle dans le domaine de la reconnaissance, notamment dans la catégorisation des espèces \cite{Branson:2014}.
+
+   \nocite{3B1B:2018, Branson:2014, Rathi:2018, Rojas:1996, TF}
+\bibliographystyle{siam}
+\bibliography{../references.bib}
+
+\end{document}
