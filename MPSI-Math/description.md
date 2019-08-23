@@ -1,29 +1,29 @@
 ### Description of this directory
 
-#### DM1
+#### DM01
 A homework made of two separate exercises:
 - One about a specific sequence, the proof for the existence of its limit and the computation of the latter;
 - The other comprises a sequence of differential equations, whose solutions are then studied to find their zeros.
 This production contains denser lines of equations, a plot of the function and what is called a *variation table ("tableau de variations")*, which is a useful way of representing the variations of a real-valued function.
 
-#### DM3
+#### DM03
 A homework made of two separate exercises:
 - The first one is the study of a complex-valued function;
 - The second one is the research of a solution of a specific differential equation.
 
-#### DM5
+#### DM05
 This homework is about finding expressions for the [Wallis' integrals](https://en.wikipedia.org/wiki/Wallis%27_integrals).
 
-#### DM6
+#### DM06
 A homework made of two separate exercises:
 - The first deals with the computation of a [Taylor series](https://en.wikipedia.org/wiki/Taylor_series) for the __tangent__ function;
 - The second is the study of a certain function.
 This production contains writing of multiple Taylor series, a function graph and other variation tables.
 
-#### DM8
+#### DM08
 The purpose of this homework is to prove Euler constant's irrationality. It contains nothing but lots of mathematical expressions and written reasoning.
 
-#### DM9
+#### DM09
 A homework made of two separate exercises:
 - The first one is the study of a certain function;
 - The other is an exercise about prime numbers.
