@@ -11,3 +11,5 @@ This repository aims to help other **LaTeX** users in their research of producin
 ## About
 Theses documents were NOT made by a professional, and I do not guarantee they were written in the most efficient way.
 Folders are named after the class in which the documents were created. `'filename'.source` contains file-related documents, such as images used in it, the exercise's questions, etc. 'DM' stands for homework *("Devoir à la Maison")*.
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
