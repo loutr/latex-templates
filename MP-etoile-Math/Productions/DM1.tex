@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage[utf8]{luainputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{enumitem}
+\usepackage{amssymb, amsmath}
+\usepackage[top=3cm, bottom=3cm, left=2.3cm, right=2.3cm]{geometry}
+
+% \DeclareMathOperator{\dom}{dom}
+% \DeclareMathOperator{\Ker}{Ker}
+% \DeclareMathOperator{\mat}{mat}
+\newcommand{\ie}[2]{\left[\!\left[#1,\, #2\right]\!\right]} % intervalle d'entiers
+
+\title{DM \No 1~: Théorème de \textsc{Schnirelmann}}
+\author{Lucas \textsc{Tabary}}
+\date{}
+
+\begin{document}
+  \maketitle{}
+
+  \section{Généralités, exemples}
+  \begin{enumerate}
+    \item Justifions avec les notations suivantes que $\sigma(A)$ définit une densité dans les ensembles. On considère la fonction~:
+    \[
+      f_A\colon \mathbb{N}^* \longrightarrow \mathbb{R},\, n \longmapsto \frac{S_n(A)}{n}
+    \]
+    On note alors $\sigma(A) = \inf_{n \in \mathbb{N}^*} f_A$ (qui existe car l'ensemble est non vide et minoré par 0). Puisque $f_A$ est à valeurs positives, $\sigma(A)$ est nécessairement positif ou nul, sinon on pourrait construire une image négative de $f_A$. D'où $\sigma(A) \geqslant 0$.
+
+    Par ailleurs, $\sigma(A) \geqslant 1 \Longrightarrow \forall n \in \mathbb{N},\, f_A(n) \geqslant 1 \Longrightarrow \forall n \in \mathbb{N},\, \#\left(\ie{1}{n} \cap A\right) \geqslant n$ or $\#\ie{1}{n} = n$ d'où $\ie{1}{n} \subset A$.
+    Il vient alors $\forall n \in \mathbb{N},\, \ie{1}{n} \subset A \Longrightarrow \mathbb{N}^* \subset A$. D'où $\sigma(A) \leqslant 1$.
+
+    \item On conclut directement~: $\sigma(A) \leqslant \frac{S_1(A)}{1} = \#\{1\} \cap A = 0$, d'où $\sigma(A) = 0$.
+
+    \item On se reporte au raisonnement de la question (1). La réciproque étant évidente, il vient~:
+    \[
+      \sigma(A) = 1 \iff \mathbb{N}^* \subset A
+    \]
+
+    \item Soient $A$ et $B$ dans $\mathcal{P}(\mathbb{N})$, tels que $A \subset B$. Il vient directement que $f_A \leqslant f_B$. Puisque $\sigma(A)$ minore $f_A(\mathbb{N}^*)$, il minore $f_B(\mathbb{N}^*)$. Par définition~:
+    \[
+      \sigma(A) \in \{x \in \mathbb{R} \,\vert\, \forall n \in \mathbb{N}^*,\, f_B(n) \geqslant x\} \quad\text{et}\quad \sigma(B) := \max \{x \in \mathbb{R} \,\vert\, \forall n \in \mathbb{N}^*,\, f_B(n) \geqslant x\}
+    \]
+    d'où $\sigma(A) \leqslant \sigma(B)$.
+
+    \item \begin{enumerate}
+      \item Soit $A \subset \mathbb{N}$ fini, il admet alors une borne supérieure (un maximum) strictement positive notée $M$. Il en découle $\forall k \in \mathbb{N},\, k > M \Longrightarrow k \not\in A$. D'où~:
+      \[
+        S_n(A) = \#(\ie{1}{n} \cap A) = \underbrace{\#(\ie{1}{M} \cap A)}_{\leqslant M} + \underbrace{\#(\ie{M + 1}{n} \cap A)}_{0} \leqslant M \Longrightarrow \forall n \geqslant M,\, 0 \leqslant f_A(n) \leqslant \frac{M}{n}
+      \]
+      Par encadrement, on en conclut que $f_A$ tend vers 0 en $+\infty$. Soit $m$ un minorant de $f_A$, si $m > 0$, alors par la définition de la limite il existe $k$ entier tel que $f_A(k) < m$, ce qui est absurde. Donc $m \leqslant 0$ ce qui implique $\sigma(A) \leqslant 0$ d'où $\sigma(A) = 0$.
+
+      \item On pose $A = \{2k + 1 \,\vert\, k \in \mathbb{N}\}$. Déterminons l'expression de $f_A(n)$ selon la parité de $n$. Si $n = 2k,\, k \in \mathbb{N}$, on a~:
+      \[
+        f_A(2k) = \frac{\#(\ie{1}{2k} \cap A)}{2k} = \frac{k}{2k} = \frac{1}{2}
+      \]
+      Sinon $n = 2k + 1,\, k \in \mathbb{N}$ et~:
+      \[
+        f_A(2k + 1) = \frac{\#(\ie{1}{2k + 1} \cap A)}{2k + 1} = \frac{k + 1}{2k + 1} = 1 - \frac{k}{2k + 1} > \frac{1}{2}
+      \]
+      Par conséquent, $\inf_{n \in \mathbb{N}^*} f_A = \min_{n \in \mathbb{N}^*} f_A = \frac{1}{2} = \sigma(A)$.
+
+      \item On pose $A = \{k^s \,\vert\, k \in \mathbb{N}\}$, où $s$ est un entier strictement supérieur à 1. On cherche à déterminer $A \cap \ie{1}{n}$ pour $n \geqslant 1$. Il vient, en utilisant la bijection réciproque de $k \mapsto k^s$, notée $k \mapsto \sqrt[s]{k}$~:
+      \[
+        x \in A \cap \ie{1}{n} \iff \left\{\begin{aligned}
+          &\exists k \in \mathbb{N},\, x = k^s \\
+          &1 \leqslant x \leqslant n
+        \end{aligned}\right.
+        \iff \left\{\begin{aligned}
+          &\exists k \in \mathbb{N},\, x = k^s \\
+          &1 \leqslant k \leqslant \sqrt[s]{n}
+        \end{aligned}\right.
+        \iff \left\{\begin{aligned}
+          &\exists k \in \mathbb{N},\, x = k^s \\
+          &1 \leqslant k \leqslant \lfloor\sqrt[s]{n}\rfloor
+        \end{aligned}\right.
+        \iff k \in \ie{1}{\lfloor\sqrt[s]{n}\rfloor}
+      \]
+      C'est-à-dire $x \in \{k^s  \,\vert\, k \in \ie{1}{\lfloor\sqrt[s]{n}\rfloor} \}$. On dénombre ainsi $\lfloor\sqrt[s]{n}\rfloor$ éléments dans l'intersection, il vient donc~:
+      \[
+        0 \leqslant f_A = \frac{\lfloor\sqrt[s]{n}\rfloor}{n} < \frac{\sqrt[s]{n} + 1}{n} \quad \text{qui tend vers 0 en $+\infty$ par encadrement et croissances comparées.}
+      \]
+      On conclut de la même manière qu'à la (1. 5. a), et $\sigma(A) = 0$.
+    \end{enumerate}
+  \end{enumerate}
+
+  \section{Théorème de Schnirelmann (1930)}
+
+  \begin{enumerate}
+    \item \begin{enumerate}
+      \item Soit $n \in \mathbb{N}^*$. On suppose que $S_n(A) + S_n(B) \geqslant n$. On en déduit~:
+      \[
+        \#\left(\ie{1}{n} \cap A\right) + \#\left(\ie{1}{n} \cap B\right) \geqslant n \Longrightarrow
+        \#\left(\ie{0}{n} \cap A\right) + \#\left(\ie{0}{n} \cap B\right) \geqslant n + 2
+      \]
+      Car d'après l'énoncé $0 \in A$, $0 \in B$. On pose $\tilde{A} = \ie{0}{n} \cap A$ et $\tilde{B} = \ie{0}{n} \cap B$. On suppose maintenant que $\forall a \in \tilde{A},\, n - a \not\in \tilde{B}$. Cependant en utilisant la bijection $k \mapsto n - k$, il vient $\#\{n - a \,\vert\, a \in \tilde{A}\} = \#\tilde{A}$.
+      Par ailleurs, $\{n - a \,\vert\, a \in \tilde{A}\} \subset \ie{0}{n}$, ce qui nous permet de déterminer le cardinal de la soustraction d'ensemble de la prochaine étape. De l'hypothèse il découle $\tilde{B} \subset \ie{0}{n} \setminus \{n - a \,\vert\, a \in \tilde{A}\}$~; soit au niveau des cardinaux~:
+      \[
+        \#\tilde{B} \leqslant n + 1 - \#\tilde{A} \Longrightarrow \#\tilde{A} + \#\tilde{B} < n + 2
+      \]
+      Ce qui contredit l'inégalité établie en début de question. L'hypothèse est donc fausse, et
+      \[
+        \exists a \in A,\, n - a \in B \Longrightarrow n = a + (n - a) \in A + B
+      \]
+
+      \item On poursuit~: $\sigma(A) + \sigma{B} \geqslant 1 \Longrightarrow \sigma(A) \geqslant 1 - \sigma(B)$. D'où~:
+      \[
+        \forall n \in \mathbb{N}^*,\, \frac{S_n(A)}{n} \geqslant \sigma(A) \geqslant 1 - \sigma(B)
+        \Longrightarrow \forall n \in \mathbb{N}, \sigma(B) \geqslant 1 - \frac{S_n(A)}{n} \Longrightarrow \forall n,\, m \in \mathbb{N}^*,\, \frac{S_m(B)}{m} \geqslant 1 - \frac{S_n(A)}{n}
+      \]
+      Et pour $n = m$,
+      \[
+        \forall n \in \mathbb{N}^*, \frac{S_n(A)}{n} + \frac{S_n(B)}{n} \geqslant 1 \Longrightarrow S_n(A) + S_n(B) \geqslant n \Longrightarrow n \in A + B
+      \]
+      D'où $\mathbb{N}^* \subset A + B$, et de plus $0 \in A$, $0 \in B$, d'où $A + B = \mathbb{N}$.
+
+      \item En utilisant les résultats précédents~: $\sigma(A) \geqslant \frac{1}{2} \Longrightarrow \sigma(A) + \sigma(A) \geqslant 1 \Longrightarrow A + A = \mathbb{N}$. On en conclut que par définition, $A$ est une base d'ordre 2 de $\mathbb{N}$.
+    \end{enumerate}
+
+    \item \begin{enumerate}
+      \item On décompose tout d'abord $\ie{1}{n}$ en parties disjointes~:
+      \[
+        \ie{1}{n} = (\ie{1}{n} \cap A) \cup \bigcup_{i = 0}^{S_n(A) - 1} \ie{a_i + 1}{a_{i + 1} - 1} \cup \ie{a_{S_n(A)} + 1}{n}
+      \]
+      Il vient alors, en utilisant les formules sur les cardinaux d'ensembles disjoints~:
+      \begin{align*}
+        S_n(A + B) &= \#(\ie{1}{n} \cap (A + B)) = \#(A \cap \ie{1}{n} \cap (A + B))  \\
+        &+ \sum_{i = 0}^{S_n(A) - 1} \#\left((A + B) \cap \ie{a_i + 1}{a_{i + 1} - 1}\right) + \#\left((A + B) \cap \ie{a_{S_n(A)} + 1}{n}\right)
+      \end{align*}
+      Et $\forall a_i \in A \cap \ie{1}{n},\,  B + \{a_i\} \subset A + B$, d'où
+      \[
+        \#(B + \{a_i\}) \cap \ie{a_i + 1}{a_{i + 1} - 1} \leqslant
+        \#(A + B) \cap \ie{a_i + 1}{a_{i + 1} - 1}
+      \]
+      Par ailleurs, les ensembles $(B + \{a_i\}) \cap \ie{a_i + 1}{a_{i + 1} - 1}$ et $B \cap \ie{1}{a_{i + 1} - a_i - 1}$  sont en bijection par $k \mapsto k - a_i$, d'où l'égalité des cardinaux et on obtient~:
+      \[
+        \#(A + B) \cap \ie{a_i + 1}{a_{i + 1} - 1} \geqslant
+        \# B \cap \ie{1}{a_{i + 1} - a_i - 1}
+      \]
+      On raisonne similairement pour obtenir~:
+      \[
+        \#(A + B) \cap \ie{a_{S_n(A)} + 1}{n} \geqslant
+        \# B \cap \ie{1}{n - a_{S_n(A)}}
+      \]
+      On forme alors l'inégalité suivante à partir de l'égalité construite initialement~:
+      \begin{align*}
+        S_n(A + B) &\geqslant \#(A \cap \ie{1}{n}) + \sum_{i = 0}^{S_n(A) - 1} \#B \cap \ie{1}{a_{i + 1} - a_i - 1} + \#B \cap \ie{1}{n - a_{S_n(A)}} \\
+        & \geqslant S_n(A) + \sum_{i = 0}^{S_n(A) - 1} S_{a_{i + 1} - a_i - 1}(B) + S_{n - a_{S_n(A)}}(B)
+      \end{align*}
+
+      \item On a $\forall A \subset \mathbb{N}^*,\, \forall n \in \mathbb{N},\, \frac{S_n(A)}{n} \geqslant \sigma(A) \iff S_n(A) \geqslant n\sigma(A)$. On injecte ce résultat dans l'inégalité obtenue en (2. 2. a) pour avoir~:
+      \begin{align*}
+        S_n(A + B) &\geqslant n\sigma(A) + \sum_{i = 0}^{S_n(A) - 1} (a_{i + 1} - a_i - 1)\sigma(B) + (n - a_{S_n(A)})\sigma(B) \\
+        &\geqslant n\sigma(A) + \sigma(B)\sum_{i = 0}^{S_n(A) - 1} (a_{i + 1} - a_i) + \sigma(B)\sum_{i = 0}^{S_n(A) - 1} (-1)  +  (n - a_{S_n(A)})\sigma(B) \\
+        &\geqslant n\sigma(A) + \sigma(B)(a_{S_n(A)} - a_0) - \sigma(B)(S_n(A))  +  (n - a_{S_n(A)})\sigma(B) \\
+        &\geqslant n\sigma(A) - S_n(A)\sigma(B)  + n\sigma(B) \\
+        \Longrightarrow \frac{S_n(A + B)}{n} &\geqslant \sigma(A) + \sigma(B) - \frac{S_n(A)}{n}\sigma(B) \quad\text{ par définition de la borne inférieure, il vient~:} \\
+        \sigma(A + B) &\geqslant \sigma(A) + \sigma(B) - \sigma(A)\sigma(B)
+      \end{align*}
+      Dans les détails, on applique ici le même type de raisonnement que pour la (2. 1. b).
+
+      \item Si $A$ est fini alors $\sigma(A) = 0$. Par ailleurs
+      \[
+        A + B \supset B \Longrightarrow \sigma(A + B) \geqslant \sigma(B) = \underbrace{\sigma(A)}_{0} + \sigma(B) - \underbrace{\sigma(A)}_{0}\sigma(B)
+      \]
+      On conserve donc aussi l'inégalité dans ce cas.
+    \end{enumerate}
+
+    \item On remarque préalablement que $\sigma(A) + \sigma(B) - \sigma(A)\sigma(B) = 1 - (1 - \sigma(A))(1 - \sigma(B))$. On considère $\{A_1,\, \dots,\, A_p\}$ un ensemble de parties de $\mathbb{N}$ contenant 0. Soit la propriété~:
+    \[
+      H_k \colon\, \sigma(A_1 + \dots + A_k) \geqslant 1 - \prod_{i = 1}^k (1 - \sigma(A_i))
+    \]
+    On procède par récurrence pour démontrer cette propriété pour $k > 1$. À $k = 2$, on applique directement la formule trouvée précédemment. Soit maintenant $k > 1$, tel que $H_k$ est vraie. Alors~:
+    \begin{align*}
+      \sigma(\underbrace{A_1 + \dots + A_k}_{\text{"$A$"}} + \underbrace{A_{k + 1}}_{\text{"$B$"}}) &\geqslant 1 - (1 - \sigma(A_1 + \dots + A_k))(1 - \sigma(A_{k + 1})) = 1 + (-1 + \sigma(A_1 + \dots + A_k))(1 - \sigma(A_{k + 1})) \\
+      &\geqslant 1 + \left(-1 + \left(1 - \prod_{i = 1}^k (1 - \sigma(A_i))\right)\right)(1 - \sigma(A_{k + 1}))
+      \geqslant 1 - \left(\prod_{i = 1}^k (1 - \sigma(A_i))\right)(1 - \sigma(A_{k + 1})) \\
+      &\geqslant 1 - \prod_{i = 1}^{k + 1} (1 - \sigma(A_i))
+    \end{align*}
+    On peut donc conclure.
+
+    \item Soit $A$ tel que $0 \in A$ et $\sigma(A) > 0$. On recherche une valeur $p$ entière telle que $\sigma(\sum_{i = 1}^p A_i) \geqslant \frac{1}{2}$. À partir du résultat de la question précédente, il vient~:
+    \[
+      \sigma\left(\sum_{i = 1}^p A\right) \geqslant 1 - \prod_{i = 1}^p (1 - \sigma(A)) \geqslant \frac{1}{2} \iff (1 - \sigma(A))^p \leqslant \frac{1}{2} \iff p \geqslant - \frac{\ln 2}{\ln (1 - \sigma(A))}
+    \]
+    En prenant l'arrondie à l'entier supérieure de la valeur précédente, on obtient ainsi une valeur qui convient pour $p$. Ainsi $\sigma(\sum_{i = 1}^p A) \geqslant \frac{1}{2}$, et donc $\sum_{i = 0}^p A$ est une base d'ordre 2 de $\mathbb{N}$, donc $A$ est une base d'ordre $2p$ de $\mathbb{N}$.
+  \end{enumerate}
+\end{document}
