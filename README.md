@@ -1,15 +1,39 @@
-# latex-math-documents
+# latex-templates
 
-This repository aims to help other **LaTeX** users in their research of producing specific scientific documents (with more complex *TikZ* figures for instance).  I am the author of the documents unless specified otherwise. So far, all documents are written in French.  Any suggestion or pull request would be happily welcome.
+This repository is a collection of **LaTeX** documents I have written over the years.  So far, they are all written in French.  Feel free to suggest anything _via_ pull requests.
 
 ## To-do list:
 
-* Open a new branch to upload an English version of each document.
-* Add smaller documents featuring a documentation file to provide minimalist examples.
-* Correct and optimize certain files.
+* Open a new branch to upload an English version of each document;
+* Optimisation and potential bugfixes;
+* Complete overhaul, with a focus on providing only templates (`.sty` files) and minimal working examples.
 
 ## About
-Theses documents were NOT made by a professional, and I do not guarantee they were written in the most efficient way.
-Folders are named after the class in which the documents were created. `'filename'.source` contains file-related documents, such as images used in it, the exercise's questions, etc. 'DM' stands for homework *("Devoir à la Maison")*.
+I am the author of these documents, unless specified otherwise.
+Folders are named after the class for which the documents were created. `'filename'.source` contains file-related documents, such as figures, exercise's questions, etc. 'DM' stands for homework *("Devoir à la Maison")*.
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+## License
+This is free and unencumbered software released into the public domain.
+
+Anyone is free to copy, modify, publish, use, compile, sell, or
+distribute this software, either in source code form or as a compiled
+binary, for any purpose, commercial or non-commercial, and by any
+means.
+
+In jurisdictions that recognize copyright laws, the author or authors
+of this software dedicate any and all copyright interest in the
+software to the public domain. We make this dedication for the benefit
+of the public at large and to the detriment of our heirs and
+successors. We intend this dedication to be an overt act of
+relinquishment in perpetuity of all present and future rights to this
+software under copyright law.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+For more information, please refer to <http://unlicense.org/>
